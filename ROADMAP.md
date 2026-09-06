@@ -3,6 +3,7 @@
 ## ACTIVE — CUA
 
 ### Current subsystem
+
 Daemon / runtime lifecycle
 
 ### Questions I must be able to answer
@@ -29,47 +30,54 @@ Daemon / runtime lifecycle
 - [ ] proposed fix/design evaluated
 - [ ] meaningful maintainer interaction
 - [ ] ideally one merged/reviewed contribution
-- [ ] reusable failure pattern recorded in PATTERN_LEDGER.md
-- [ ] interview evidence recorded
+- [ ] reusable failure pattern recorded in `PATTERN_LEDGER.md` if actually earned
+- [ ] interview evidence recorded if actually earned
 
 ### Stopping boundary
 
 Do not attempt to understand the entire CUA repository.
 
-Stop once I have meaningful depth in runtime lifecycle /
-ownership / recovery and have converted that depth into engineering evidence.
+Stop once I have meaningful depth in runtime lifecycle / ownership / recovery and have converted that depth into engineering evidence.
 
+### Switch gate
+
+**Status: NOT REACHED**
+
+See `WORKFLOW.md` for the repository-switching rule.
+
+---
 
 ## NEXT — OpenHands
 
-Not active yet.
+**Status: NOT ACTIVE**
 
 Purpose:
+
 Study the layer above the runtime:
 
+```text
 durable conversation execution
 → events
 → actions
 → tools
 → observations
-→ pause/cancel/resume
+→ pause / cancel / resume
+```
 
-## Repo Switching Rule
+OpenHands becomes active only after the CUA stopping boundary is reached or another switch condition in `WORKFLOW.md` is satisfied.
 
-A new repository becoming interesting is not a reason to switch.
+---
 
-New issues, announcements, Discord discussions, or hiring relevance may be
-recorded in the NEXT section, but must not create another active workstream.
+## Future Candidates
 
-Switch only when:
+Record potentially valuable future subsystems/issues here without starting a second workstream.
 
-1. the current subsystem stopping boundary has been reached, OR
-2. the subsystem proves to be a dead end for meaningful contribution after
-   serious investigation, OR
-3. maintainers explicitly indicate the work is not useful / feasible.
+Use this format:
 
-Do not switch because:
-- another repo looks exciting
-- an easier issue appears elsewhere
-- progress feels temporarily difficult
-- I want broader exposure
+```text
+Repository:
+Subsystem / issue:
+Why relevant:
+Potential invariant/pattern:
+Status: FUTURE — DO NOT INVESTIGATE DEEPLY YET
+```
