@@ -86,3 +86,35 @@ Have I seen, or could I reasonably expect to see, this failure class
 in another agent runtime?
 
 High transferability = high learning value.
+
+## 9. PR submission gate
+
+Finding something that could be changed is not sufficient justification
+for a pull request.
+
+Before submitting a PR, I should be able to answer:
+
+- What real problem does this solve?
+- Can I reproduce the failure or demonstrate the need?
+- What invariant is being violated?
+- Why does the fix belong at this layer?
+- What alternatives did I consider, and why did I choose this approach?
+- What regression test or verification proves the change?
+- Have I checked related issues, PRs, and recent maintainer direction?
+- Can I explain and defend the important implementation decisions
+  without relying on the coding agent?
+
+For non-trivial architectural changes, prefer:
+reproduce → gather evidence → discuss direction → implement.
+
+The PR should normally communicate:
+
+problem → reproduction → root cause → change → rationale → verification.
+
+Do not submit:
+
+- speculative fixes for unobserved problems;
+- cosmetic changes for contribution credit;
+- broad AI-generated refactors without demonstrated need;
+- changes I cannot technically explain;
+- fixes whose usefulness to the project is unclear.
