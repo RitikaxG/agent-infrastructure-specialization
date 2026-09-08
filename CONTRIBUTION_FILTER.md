@@ -4,6 +4,18 @@ An open issue is NOT automatically worth working on.
 
 Before committing serious time, evaluate:
 
+## 0. Current workstream alignment
+
+Before asking how interesting an issue is, ask whether it advances the **currently active repository/subsystem** in `ROADMAP.md` and the exact engineering boundary in the active repository's `CURRENT.md`.
+
+If **yes**, evaluate it further.
+
+If **no, but strategically interesting**, record it as a future candidate in `ROADMAP.md` and do not investigate it deeply now.
+
+If **no and weakly transferable**, skip it.
+
+Do not let a high-quality but misaligned issue create a second active workstream.
+
 ## 1. Subsystem relevance
 
 Does this teach one of my target areas?
