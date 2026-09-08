@@ -11,15 +11,34 @@ It does not own the six-month goal, current roadmap, contribution-selection crit
 Use the files in this order depending on the question being answered:
 
 - `NORTH_STAR.md` — **Why / destination**
+- `AGENTS.md` — **How Codex orchestrates routine workflow transitions**
 - `WORKFLOW.md` — **How the specialization workspace operates**
-- `ROADMAP.md` — **Where I am now and what comes next**
+- `ROADMAP.md` — **Which repository/subsystem is active and what comes next**
 - `CONTRIBUTION_FILTER.md` — **What deserves serious engineering time**
 - `PATTERN_LEDGER.md` — **What generalizes across systems**
 - `INTERVIEW_EVIDENCE.md` — **What I can prove I actually did**
 
-Repository-specific workspaces such as `cua-learning/` own detailed investigation state: code paths, hypotheses, tests, failures, diagrams, and the immediate next engineering question.
+Repository-specific workspaces such as `cua-learning/` own detailed investigation state: code paths, hypotheses, tests, failures, diagrams, and the **exact active engineering question**.
 
 Do not duplicate detailed repository investigation notes into this repository. Promote only durable conclusions.
+
+### Exact-question ownership
+
+The global roadmap should remain stable at the repository/subsystem level.
+
+For example:
+
+```text
+ROADMAP.md
+→ active repository: CUA
+→ active subsystem: daemon / runtime lifecycle
+
+cua-learning/CURRENT.md
+→ exact current engineering question
+→ current stopping boundary inside that investigation
+```
+
+Do not copy every short-lived repository question into `ROADMAP.md`.
 
 ---
 
@@ -60,18 +79,33 @@ Update only when the six-month objective, intended specialization, or overall bu
 
 It should change rarely.
 
+### `AGENTS.md`
+
+Owns Codex's global orchestration behavior:
+
+- fresh-session routing;
+- routine workflow-mode transitions;
+- when global strategy should be consulted;
+- autonomous checkpoint routing;
+- human approval gates;
+- promotion from repository-specific evidence into global artifacts.
+
+It should not duplicate repository-specific source paths or experiment details.
+
 ### `ROADMAP.md`
 
 Owns:
 
 - active repository;
 - active subsystem;
-- current engineering objective;
-- stopping boundary;
+- subsystem-level objective;
+- global stopping boundary;
 - next likely subsystem;
 - future candidates worth remembering.
 
-Update when the active subsystem changes, its stopping boundary is reached, or a future candidate should be recorded.
+The exact active engineering question belongs to the active repository's `CURRENT.md`.
+
+Update `ROADMAP.md` when the active subsystem changes, its stopping boundary is reached, or a future candidate should be recorded.
 
 ### `CONTRIBUTION_FILTER.md`
 
@@ -95,7 +129,7 @@ Owns evidence from work I have actually performed.
 
 Do not pre-fill hypothetical achievements or infer contributions.
 
-Capture interview-worthy investigations while they are fresh: problem, HLD, lifecycle, relevant LLD, reproduction, invariant, root cause, alternatives, chosen design, tests, maintainer feedback, result, and follow-up questions.
+Capture interview-worthy investigations while they are fresh: problem, HLD, lifecycle, relevant LLD, reproduction, invariant, root cause or corrected assumption, alternatives, chosen design/conclusion, tests, maintainer feedback, result, and follow-up questions.
 
 ---
 
@@ -106,8 +140,8 @@ A fresh ChatGPT/Codex session should first establish:
 1. the North Star;
 2. the active repository;
 3. the active subsystem;
-4. the stopping boundary;
-5. the current engineering question.
+4. the global stopping boundary;
+5. the exact current engineering question from the active repository workspace.
 
 Then read the active repository's `CURRENT.md` and only the subsystem/investigation material required for the current work.
 
@@ -116,15 +150,41 @@ Do **not** reload every global file for every coding step.
 Read the global strategy files when making a strategic decision such as:
 
 - choosing a subsystem;
-- choosing an issue;
+- choosing or seriously evaluating an issue/PR;
 - deciding whether to switch repositories;
 - promoting a failure into a reusable pattern;
 - deciding whether repeated observations justify tooling;
 - reviewing overall progress.
 
+Codex should follow `AGENTS.md` to make these routing decisions proactively rather than waiting for the human to request each transition.
+
 ---
 
-## 5. Investigation → Update Routing
+## 5. Workflow Transition Ownership
+
+Routine transitions are orchestration work, not something the human should have to micromanage.
+
+Codex should proactively decide when to:
+
+- continue explanation;
+- ask the human to explain a model back;
+- inspect the minimum relevant source;
+- stop source inspection because further reading has diminishing value;
+- design an experiment;
+- require a prediction before a break;
+- run the experiment or hand one command at a time to the human;
+- checkpoint durable learning;
+- inspect issue/PR/design history;
+- begin systematic debugging;
+- move from root cause into design alternatives;
+- move from approved design into implementation/verification;
+- extract transferable patterns or interview evidence.
+
+The human still owns actual understanding, important predictions, architecture choices, contribution commitment, and approval of meaningful implementation direction.
+
+---
+
+## 6. Investigation → Update Routing
 
 After a meaningful investigation, update only the files whose responsibility actually changed.
 
@@ -135,7 +195,9 @@ Update the active repository workspace:
 - `CURRENT.md`;
 - subsystem note;
 - investigation/failure notes;
-- diagrams if useful.
+- durable diagrams if useful.
+
+Codex may do this autonomously at natural checkpoints. A separate handoff prompt is not required merely to keep routine state current.
 
 ### A reusable invariant emerged
 
@@ -163,7 +225,7 @@ Only then update `NORTH_STAR.md`.
 
 ---
 
-## 6. Knowledge Promotion Path
+## 7. Knowledge Promotion Path
 
 Knowledge should move upward through evidence, not through speculation:
 
@@ -200,7 +262,7 @@ failure
  ↓
 invariant
  ↓
-root cause
+root cause / corrected assumption
  ↓
 design alternatives
  ↓
@@ -213,7 +275,24 @@ reusable lesson
 
 ---
 
-## 7. Failure-Suite Promotion Rule
+## 8. Issue / PR Discovery Gate
+
+Do not search for upstream work merely because something looks strange.
+
+Before issue/PR discovery becomes the main activity, establish enough repository-specific understanding to answer:
+
+- what behavior is expected;
+- what behavior is actually observed/source-established;
+- where the relevant failure/design boundary is;
+- which active subsystem question this work advances.
+
+Then read `ROADMAP.md` and apply `CONTRIBUTION_FILTER.md` before committing serious time.
+
+An interesting but misaligned issue should normally be recorded as a future candidate rather than turning into a second active workstream.
+
+---
+
+## 9. Failure-Suite Promotion Rule
 
 Failure-suite development happens **alongside real repository work**, but it must not become a second active project.
 
@@ -232,7 +311,7 @@ The eventual failure lab and agent runtime/harness must be **evidence-derived**,
 
 ---
 
-## 8. Periodic Strategy Review
+## 10. Periodic Strategy Review
 
 Approximately every 3–4 weeks, review the specialization as a whole:
 
