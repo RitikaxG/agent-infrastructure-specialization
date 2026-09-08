@@ -109,4 +109,222 @@ Write only after the investigation is mature enough to explain clearly.
 
 ## Earned Evidence
 
-_No entries yet. Add the first entry only when the current CUA investigation produces defensible engineering evidence._
+### CUA — Driver Runtime / Daemon lifecycle and session recovery
+
+### Status
+
+`INVESTIGATION`
+
+### Problem
+
+Understand what survives, breaks, and recovers when the long-running CUA Driver Daemon disappears while the MCP Proxy and logical session remain alive.
+
+The investigation focused first on **Daemon death between requests**, not yet on Daemon death during an actively executing tool call.
+
+### HLD
+
+```text
+MCP Client
+→ cua-driver mcp Proxy
+→ Unix socket
+→ Cua Daemon
+→ Driver Runtime / platform tools
+```
+
+Important ownership split established during the investigation:
+
+- **Proxy:** logical session identity, MCP/client continuity, request stamping, persistent control connection.
+- **Daemon:** process-local lifecycle records, session activity/in-flight bookkeeping, cursor/config/runtime state, tool execution.
+
+The Proxy and Daemon are independent process/failure domains linked by a `session_id`, not shared memory.
+
+### Lifecycle / data flow
+
+Healthy behavior:
+
+- normal tool calls use fresh Unix data-plane connections;
+- the Proxy mints one session id and stamps it on later calls;
+- the Proxy also opens a persistent `session_begin(session_id)` control connection used for direct liveness/cleanup ownership.
+
+Replacement behavior established:
+
+```text
+old Daemon disappears
+→ Proxy + logical S1 survive
+→ old Daemon memory/listener/control connection disappear
+→ replacement Daemon starts at same socket path
+→ later fresh per-call connection reaches replacement
+→ old non-ended S1 can be lazily admitted
+→ replacement creates fresh lifecycle/session state under S1
+```
+
+### Relevant LLD
+
+Source tracing covered the paths responsible for:
+
+- Proxy creation and persistence of one internal session id;
+- persistent `session_begin` control connection and its lack of automatic reconnect after established control loss;
+- per-tool fresh Unix connections;
+- Daemon control-session handling;
+- implicit/lazy session admission through lifecycle dispatch;
+- `LifecycleRecord`, activity timestamp, and in-flight accounting;
+- idle lifecycle maintenance and normal session-end fan-out;
+- traced cursor/config cleanup hooks.
+
+The main source areas included the Proxy path, Daemon serving/connection path, and core session-lifecycle implementation.
+
+### Failure reproduction
+
+Two useful manual lifecycle reproductions were performed.
+
+**1. Daemon dead before the next request**
+
+- preserved the existing MCP Proxy/session;
+- terminated only the Daemon;
+- verified the socket pathname could remain while no listener existed;
+- later tool calls failed with `Connection refused`;
+- no steady-state automatic Daemon restart was observed.
+
+**2. Replacement Daemon with the same old session identity**
+
+A clean baseline was established with:
+
+- Proxy PID `14126`;
+- old Daemon PID `48613`;
+- session `mcp-14126-1788769126087137000`;
+- successful pre-break session-owned cursor action.
+
+Then only the old Daemon was terminated and replacement Daemon PID `19835` was started at the same socket path while preserving the same Proxy/session.
+
+Observed after replacement:
+
+- `list_apps` succeeded through the same Proxy;
+- `set_agent_cursor_enabled` also succeeded using the same old S1 even though no new persistent `session_begin(S1)` had been established with the replacement.
+
+After a later idle period, `get_agent_cursor_state(S1)` reported that the session had ended while both the same Proxy and replacement Daemon processes were still alive.
+
+### Invariant / corrected mental model
+
+The most important corrected model was:
+
+```text
+logical session identity continuity
+!= Daemon runtime-state continuity
+!= restored control-liveness continuity
+```
+
+The replacement behavior is **identity reuse + fresh state creation**, not restoration of old Daemon process memory.
+
+The persistent control connection is not a universal admission gate for every session-owned action. Its important role is immediate owner-liveness cleanup through EOF. If that control relationship is lost during Daemon replacement and not restored, normal inactivity-based lifecycle cleanup still bounds lazily recreated state.
+
+### Root cause / corrected assumption
+
+No upstream bug has been established from this completed slice.
+
+My initial assumption was wrong: I expected session-owned/stateful work to be rejected by a replacement Daemon that had never received a new `session_begin(S1)`.
+
+Runtime evidence contradicted that assumption. Source tracing then showed that an unknown, non-ended S1 can be implicitly admitted and receive a fresh lifecycle record/activity state.
+
+A second concern — that recreated state might become permanently orphaned without restored control EOF — was also too strong. Source tracing established the idle lifecycle fallback, and runtime evidence later showed the S1 had ended while both processes remained alive.
+
+### Alternatives considered
+
+For the replacement-session behavior I reasoned about two possible contracts before the runtime result was known:
+
+#### Option A — strict generation/control admission
+
+Reject old session-owned work until the replacement receives an explicit fresh session/control registration.
+
+Potential property: clearer generation boundary, but worse continuity for a surviving client/Proxy.
+
+#### Option B — identity reuse with lazy state recreation
+
+Allow a non-ended logical session identity to be admitted by the replacement and recreate process-local lifecycle/session state on demand.
+
+Observed CUA behavior matched this model for the tested cursor operation.
+
+### Chosen approach / conclusion
+
+No fix was chosen because this investigation has not established that the between-request replacement behavior is itself defective.
+
+The current conclusion is to preserve the actual contract precisely, then move to the next reliability boundary: **Daemon death during an active request**, where action execution and response delivery may become ambiguous.
+
+### What I personally did
+
+- reasoned through Proxy vs Daemon ownership and process boundaries;
+- formed explicit predictions before important lifecycle tests;
+- ran/observed the clean-baseline manual process experiments;
+- preserved exact Proxy/session identity while selectively replacing the Daemon;
+- compared prediction against runtime evidence;
+- corrected the mental model after the stateful replacement call succeeded;
+- used bounded source traces to understand lazy admission, control-connection semantics, and idle cleanup;
+- kept runtime observation, source-verified behavior, inference, and untested boundaries separate.
+
+AI/Codex assisted with repository/source tracing and explanation; the runtime predictions, experiment interpretation, and resulting engineering model are the learning evidence being preserved here.
+
+### Testing / evidence
+
+**OBSERVED**
+
+- Daemon absence before a later call produced connection refusal while Proxy/session survived;
+- manually restored replacement Daemon was reachable through the same Proxy;
+- old S1 was accepted for a clearly session-owned cursor operation;
+- later the same S1 was ended/rejected while the same Proxy and replacement Daemon remained alive.
+
+**SOURCE-VERIFIED**
+
+- per-call fresh Unix data connections;
+- persistent control-session behavior and no traced reconnect loop after established control loss;
+- implicit/lazy session lifecycle admission;
+- default 300-second idle TTL;
+- roughly 30-second lifecycle maintenance sweep;
+- in-flight protection and normal end/cleanup fan-out;
+- cursor/config cleanup path.
+
+**INFERENCE**
+
+- the exact observed runtime S1 expiry was caused by the idle reaper; the session-specific end reason was not directly exposed in the checked logs.
+
+### Maintainer feedback
+
+None yet for this investigation slice.
+
+Related upstream issues/PRs were used as design/history context, but they are not counted as maintainer feedback on my work.
+
+### Result
+
+Issue: none claimed yet
+
+PR: none yet
+
+Outcome: between-request Daemon replacement/session-recovery model is understood well enough to move to the active-request failure boundary.
+
+### Generalized lesson
+
+A logical identifier surviving a physical runtime replacement does not imply that the old runtime's state or liveness relationship survived.
+
+When evaluating another agent runtime, explicitly ask:
+
+- what identity survives a runtime generation change;
+- what state is recreated versus restored;
+- what control/liveness relationship is lost or rebound;
+- what cleanup fallback bounds recreated state;
+- what the caller can safely assume after recovery.
+
+### 2-minute spoken answer
+
+I investigated CUA's Driver Runtime lifecycle by separating the MCP Proxy from the long-running Daemon and intentionally killing only the Daemon while preserving the Proxy and session. The first result was straightforward: the socket pathname could remain even though no listener existed, so later calls got connection refused and the running Proxy did not automatically supervise/restart the Daemon.
+
+The more interesting result came after manually starting a replacement Daemon. I originally expected stateless calls to recover but session-owned work to fail because the replacement had never received the Proxy's persistent `session_begin`. That prediction was wrong. The same old session id successfully performed a cursor-state operation. Tracing the lifecycle code showed the replacement can lazily admit an unknown non-ended session id and create fresh process-local lifecycle state under it.
+
+That changed my model: the Proxy owns logical identity continuity, while the Daemon owns runtime state. Reusing the same session id is not state recovery. The persistent control connection is mainly an immediate liveness/cleanup signal; after replacement it was not re-established, but idle lifecycle cleanup still existed. Later the same session became ended while both Proxy and replacement Daemon were alive, consistent with that fallback. The next reliability question is what happens if the Daemon dies during an active side-effecting request, where the caller may not know whether the action happened before the response disappeared.
+
+### Likely interviewer follow-up questions
+
+- Why does the Proxy use fresh per-tool connections but also maintain a persistent control connection?
+- Why can identity continuity be useful even without state continuity?
+- What state should be generation-local versus recoverable?
+- What would break if the idle fallback did not exist?
+- How would you design explicit runtime generation/rebinding semantics?
+- What changes when the Daemon dies after an external side effect but before returning the response?
+- Which operations can be safely retried, and what idempotency mechanism would you need for the others?
