@@ -14,6 +14,31 @@ See the active repository learning workspace:
 
 `ROADMAP.md` stays at the repository/subsystem level; short-lived investigation questions belong in `CURRENT.md`.
 
+### September 2026 outcome target
+
+The goal for this month is not broad CUA coverage. It is to convert depth in
+Daemon / runtime lifecycle into defensible engineering evidence.
+
+By the end of September, target:
+
+- [ ] daemon/runtime lifecycle HLD explainable independently
+- [ ] relevant LLD landmarks understood
+- [ ] at least 3 meaningful lifecycle failure scenarios tested
+- [ ] active-request Daemon death / execution-response boundary investigated
+- [ ] at least 1 real upstream issue/failure reproduced or independently established
+- [ ] violated invariant and root cause understood for at least one real problem
+- [ ] meaningful design alternatives evaluated
+- [ ] at least 1 maintainer-visible technical interaction
+- [ ] at least 1 serious PR attempt
+- [ ] target a second related PR if it emerges naturally from the same subsystem
+- [ ] one defensible interview-quality engineering story
+- [ ] transferable pattern promoted only if actually earned
+
+Do not remain in source-reading mode merely because more implementation exists.
+
+A second subsystem may begin before month-end only if the current subsystem's
+switch gate has genuinely been reached.
+
 ### Questions I must be able to answer
 
 - Who owns the daemon?
