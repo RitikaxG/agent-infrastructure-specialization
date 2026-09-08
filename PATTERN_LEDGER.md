@@ -68,41 +68,83 @@ Do not automate until the pattern is supported by real investigations.
 
 ---
 
-## INV-002 — Logical sessions must not silently cross runtime generations
+## INV-002 — Logical identity continuity must not be confused with runtime-state continuity
 
-**Status: CANDIDATE**
+**Status: SUPPORTED**
 
 ### General invariant
 
-A logical session/handle created against runtime generation N must not silently remain valid against a different physical runtime generation unless the system explicitly revalidates or rebinds it.
+If a logical session/handle is allowed to survive replacement of the physical runtime that originally owned its state, the system must make the continuity contract explicit:
+
+- which identity is reused;
+- which runtime-owned state is recreated;
+- which old state is intentionally lost;
+- which liveness/cleanup relationship is re-established or remains absent.
+
+Reusing the same logical identifier must not be mistaken for preserving the old runtime's memory or control relationship.
 
 ### Evidence personally investigated
 
 #### CUA
 
-Investigation: not yet sufficient to claim evidence.
+Subsystem: daemon / runtime lifecycle
+
+Investigation: replacement Daemon with surviving MCP Proxy/session
+
+Observed behavior:
+
+- the Proxy retained the same logical session id after the old Daemon disappeared;
+- the old Daemon's process-local lifecycle/runtime state and persistent control connection disappeared with that process;
+- a manually started replacement Daemon at the same socket path accepted later calls from the surviving Proxy;
+- the replacement accepted a clearly session-owned cursor operation using the old session id even though it had not received a new persistent `session_begin` for that id;
+- current source showed the unknown, non-ended id could be lazily admitted, creating a fresh `LifecycleRecord` / activity state under the same logical identity;
+- after inactivity, that replacement-created session later became ended while both the same Proxy and replacement Daemon were still alive; source inspection established the idle-TTL/reaper cleanup path, while the exact runtime end reason remained an inference because logs did not expose it directly.
+
+Corrected mental model:
+
+```text
+logical identity continuity
+!= old runtime-state continuity
+!= restored control-liveness continuity
+```
+
+The important CUA behavior is therefore **identity reuse + fresh state creation**, not transparent recovery of the old Daemon generation.
 
 ### Comparison candidates
 
-- Browser Use — stale CDP/session/target handles after reconnect or browser restart
-- OpenHands — persisted logical runtime state vs refreshed physical connection/runtime
-- E2B — sandbox/process incarnation identity if relevant during later investigation
+- Browser Use — stale or reusable logical browser/session/target handles after browser/control reconnect
+- OpenHands — persisted logical runtime/conversation identity vs refreshed physical runtime connection/state
+- E2B — sandbox/process incarnation identity during sandbox/runtime replacement
 
 These are comparison targets, not completed evidence.
 
+### General lesson
+
+Generation changes do not automatically require rejection of every old logical identifier; some systems intentionally rebind or recreate state. The engineering requirement is to make the contract explicit and prevent callers from assuming that identity continuity implies state continuity.
+
+Important questions for another runtime are:
+
+- Is the old logical id rejected, rebound, or lazily admitted?
+- What state is generation-local?
+- What cleanup/liveness signal belongs to the old physical runtime?
+- What fallback bounds recreated state if the original control relationship is gone?
+
 ### Failure-lab candidate
 
-Potential reusable primitive:
+Potential reusable replacement scenario:
 
 ```text
-capture generation / incarnation
-create logical handle
-replace physical runtime
-reuse old handle
-assert stale handle is rejected or explicitly rebound
+capture logical identity
+create runtime-owned state
+replace physical runtime generation
+reuse old logical identity
+observe whether it is rejected / rebound / lazily admitted
+assert the documented continuity contract
+assert old generation-local state is not silently assumed to exist
+assert replacement-created state still has a bounded cleanup path
 ```
 
-Do not implement generically until repeated evidence justifies it.
+Do not implement this generically until another personally investigated system confirms that a reusable abstraction is warranted.
 
 ---
 
@@ -124,7 +166,7 @@ Do not implement generically until repeated evidence justifies it.
 Subsystem:
 Investigation / issue / PR:
 Observed behavior:
-Root cause:
+Root cause / corrected assumption:
 
 ### Comparison candidates
 
