@@ -6,6 +6,14 @@
 
 Daemon / runtime lifecycle
 
+### Exact active engineering question
+
+See the active repository learning workspace:
+
+`../cua-learning/CURRENT.md`
+
+`ROADMAP.md` stays at the repository/subsystem level; short-lived investigation questions belong in `CURRENT.md`.
+
 ### Questions I must be able to answer
 
 - Who owns the daemon?
