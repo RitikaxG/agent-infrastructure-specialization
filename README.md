@@ -38,7 +38,8 @@ problems**, not four independent technologies to learn.
 **Current proof direction:** convert reproduced active-request execution
 uncertainty into maintainer-visible contribution evidence.
 
-See the active `cua-learning/CURRENT.md` for the exact live engineering question.
+See the active `../cua-learning/CURRENT.md` for the exact live engineering
+question.
 
 ## Global Files
 
