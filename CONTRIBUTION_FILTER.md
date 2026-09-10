@@ -1,158 +1,257 @@
-# Contribution Selection Filter
+# Contribution and Repository Selection Filter
 
-An open issue is NOT automatically worth working on.
+This file decides whether a **repository, subsystem, issue, investigation, or PR**
+deserves serious time.
 
-Before committing serious time, evaluate:
+An interesting issue is not automatically useful. A technically perfect
+repository is not automatically a good six-month primary if outside contributors
+cannot realistically get reviewed or recognized.
 
-## 0. Current workstream alignment
+## 0. Active-Workstream Alignment
 
-Before asking how interesting an issue is, ask whether it advances the **currently active repository/subsystem** in `ROADMAP.md` and the exact engineering boundary in the active repository's `CURRENT.md`.
+Before anything else, ask whether the work advances the current repository,
+subsystem, and exact engineering boundary recorded in `ROADMAP.md` and the active
+learning workspace `CURRENT.md`.
 
-If **yes**, evaluate it further.
+If not:
 
-If **no, but strategically interesting**, record it as a future candidate in `ROADMAP.md` and do not investigate it deeply now.
+- strategically useful → record as a future candidate;
+- weakly transferable → skip;
+- do not create a second active workstream.
 
-If **no and weakly transferable**, skip it.
+## 1. Primary Repository Activation Gate
 
-Do not let a high-quality but misaligned issue create a second active workstream.
+Before a repository receives multi-week investment, verify all of these.
 
-## 1. Subsystem relevance
+### Technical fit
 
-Does this teach one of my target areas?
+The selected subsystem must harden one or more fundamentals in `FUNDAMENTALS.md`
+and fit the Agent Runtime Reliability specialization.
 
-- lifecycle
-- ownership
-- generations
-- state
-- events
-- cancellation
-- recovery
-- browser/session identity
-- sandbox lifecycle
-- reconciliation
-- cleanup
-- observability
+### Live contribution surface
 
-If not, usually skip.
+Require a bounded scan showing multiple recent issues/PRs in the intended
+failure family or subsystem, with at least one credible contribution-shaped
+surface.
 
-## 2. Architecture relevance
+Useful evidence includes:
+
+- reproducible user bug;
+- missing regression;
+- active maintainer discussion;
+- recent adjacent fixes;
+- accepted design/RFC with bounded implementation gap;
+- ready/unassigned issue;
+- real reliability gap demonstrable from current source/runtime.
+
+### External-contributor viability
+
+Check that outside contributors actually receive review/merge or substantive
+technical responses. Do not infer community openness solely from a
+`CONTRIBUTING.md` file.
+
+### Maintainer-relationship viability
+
+A primary repository must offer a realistic path for repeated useful interaction
+through issues, PR reviews, RFCs, Discord/community help, or similar legitimate
+channels.
+
+Prefer repositories where repeated related contributions can make the human
+recognizable around one subsystem/failure class.
+
+**Maintainer-relationship viability may not score zero for a primary repo.**
+
+### Reproduction/test fit
+
+There must be a plausible way to observe, reproduce, or regression-test the
+selected behavior with available machines, CI, mocks, harnesses, or bounded
+cloud spend.
+
+### Career fit
+
+The resulting proof should map clearly to current target roles: agent runtimes,
+durable execution, browser/computer control, sandboxes, distributed systems,
+retries/recovery, observability, or infrastructure debugging.
+
+If a planned repo fails this activation gate when its month arrives, preserve the
+failure family and choose a stronger current repository instead of forcing the
+logo.
+
+## 2. Subsystem / Issue Scorecard
+
+Score `0–2` on each dimension:
+
+| Dimension | 0 | 1 | 2 |
+| --- | --- | --- | --- |
+| Market relevance | weak | adjacent | direct agent-runtime/startup relevance |
+| Specialization fit | disconnected | partial | strengthens core reliability spine |
+| Reproducibility | speculative | partial | deterministic/high-quality evidence possible |
+| Architecture boundary | local/trivial | useful | important runtime/session/sandbox boundary |
+| Maintainer evidence | none | some | active project/user/maintainer signal |
+| Regression value | hard to assert | possible | clear invariant/test |
+| PR-shaped scope | huge/vague | can narrow | focused first contribution |
+| Transferability | isolated | plausible | repeated cross-runtime failure class |
+
+Interpretation:
+
+- **13–16:** strong candidate;
+- **10–12:** bounded investigation before commitment;
+- **<10:** usually skip.
+
+Do not let a numeric score override an obvious blocker such as an active competing
+PR, inaccessible test environment, or maintainer rejection.
+
+## 3. Architecture Preference
 
 Prefer failures crossing important boundaries:
 
-controller ↔ runtime
-runtime ↔ daemon
-daemon ↔ browser
-agent ↔ tool
-action ↔ observation
-browser session ↔ target
-control plane ↔ sandbox
+```text
+agent/controller ↔ runtime
+session ↔ execution owner
+SDK ↔ transport
+runtime ↔ daemon/worker
+request ↔ external side effect
+runtime ↔ browser/CDP
+browser session ↔ target/renderer
+control plane ↔ sandbox/node
+authoritative state ↔ cache/index
+```
 
-## 3. Reproducibility
+These teach more transferable systems judgment than cosmetic/local changes.
 
-Can I produce a deterministic or useful reproduction?
+## 4. Agent Impact
 
-A strong reproduction may itself be a valuable contribution.
+Prefer work affecting:
 
-## 4. Invariant
+- correctness;
+- false success;
+- hangs/unbounded waits;
+- stale state;
+- duplicated side effects;
+- cancellation/recovery;
+- resource leaks;
+- isolation;
+- observability needed to resolve uncertain execution.
 
-Can I express the expected property as:
+## 5. Reproduction and Invariant Gate
 
-"After X, Y must always remain true."
+Before serious implementation, be able to state:
 
-If I cannot identify the invariant, I probably do not understand
-the issue deeply enough yet.
+```text
+EXPECTED
+ACTUAL
+REPRODUCTION / SOURCE EVIDENCE
+RUNTIME PATH
+STATE / OWNERSHIP
+FAILURE BOUNDARY
+INVARIANT
+```
 
-## 5. Agent impact
+A strong reproduction can itself be a meaningful contribution.
 
-Prefer failures affecting:
+If the invariant cannot yet be expressed, continue the minimum necessary
+investigation rather than guessing at a fix.
 
-- correctness
-- availability
-- false-success
-- hangs
-- stale state
-- duplicated side effects
-- resource leaks
-- broken recovery
-- isolation
+## 6. Existing-Work-First Gate
 
-over cosmetic or unrelated changes.
+Before drafting or recommending a new public issue, RFC, or PR, inspect:
 
-## 6. Regression value
+- exact and adjacent open issues;
+- assignments/labels/milestones;
+- active and recently merged PRs;
+- relevant RFC/design decisions;
+- recent maintainer direction.
 
-Can this become a test that prevents the failure class from returning?
+Then choose the narrowest honest path:
 
-## 7. Existing-work and external-artifact gate
+- matching active PR → review/contribute there; do not compete;
+- matching issue without active implementation → reproduce/clarify and seek
+  selection;
+- accepted design → inspect implementation/parity gaps;
+- no matching durable record → new issue/RFC may be appropriate;
+- merely adjacent work → keep the finding distinct.
 
-Before drafting or proposing a new public issue, RFC, or PR, first make a
-read-only inventory of the active subsystem's exact and adjacent existing work:
+Record the short inventory and exclusions in the active `CURRENT.md` before
+external publication.
 
-- open issues and their assignments, labels, milestones, and linked work;
-- active pull requests and recently merged pull requests that may already own the
-  behavior;
-- relevant RFCs, their decisions, and implementation/completion status; and
-- recent maintainer direction or review feedback.
+## 7. Maintainer Relationship Rule
 
-Classify the result before choosing an external artifact:
+Relationship-building is not separate networking. It is repeated useful
+engineering work.
 
-- matching active PR → review or contribute there;
-- matching issue without an active PR → reproduce/clarify it, then seek selection;
-- accepted RFC → inspect whether the observed gap is already implemented,
-  deliberately deferred, or a genuine parity/follow-up gap;
-- no matching durable record → a new issue or RFC may be considered; or
-- only adjacent work → keep the finding distinct rather than forcing a false
-  duplicate relationship.
+Preferred sequence:
 
-Record the inventory, key exclusions, and chosen path in the active repository's
-durable current state before asking for external-publication approval. This gate
-does not replace subsystem alignment, reproducibility, or human contribution
-commitment.
+```text
+reproduce
+→ add useful evidence / ask focused contract question
+→ incorporate maintainer direction
+→ regression/design
+→ focused PR
+→ respond carefully to review
+→ follow an adjacent related problem when useful
+```
 
-## 8. Maintainer alignment
+Do not post comments merely for visibility.
 
-Before a large implementation:
+A rejected direction can still be valuable if it teaches project intent and is
+captured accurately.
 
-- search existing PRs
-- inspect recent related changes
-- reproduce first
-- post evidence if useful
-- confirm direction when blast radius is high
+## 8. Testing Value
 
-## 9. Transferability
+Prefer contribution candidates where the change can protect a system property,
+not only a happy-path example.
 
-Have I seen, or could I reasonably expect to see, this failure class
-in another agent runtime?
+Ask:
 
-High transferability = high learning value.
+- What must remain true under crash/restart/timeout/cancellation?
+- What observable proves it?
+- Can the pre-fix behavior fail the test?
+- Does the test detect the real public effect rather than only a successful tool
+  response?
 
-## 10. PR submission gate
+The human should increasingly own the **test intent** even when Codex writes
+unfamiliar Rust/Go/Python syntax.
 
-Finding something that could be changed is not sufficient justification
-for a pull request.
+## 9. PR Submission Gate
 
-Before submitting a PR, I should be able to answer:
+Before a serious PR, the human must be able to defend:
 
-- What real problem does this solve?
-- Can I reproduce the failure or demonstrate the need?
-- What invariant is being violated?
-- Why does the fix belong at this layer?
-- What alternatives did I consider, and why did I choose this approach?
-- What regression test or verification proves the change?
-- Have I checked related issues, PRs, and recent maintainer direction?
-- Can I explain and defend the important implementation decisions
-  without relying on the coding agent?
+- real problem and user/system impact;
+- reproduction/evidence;
+- HLD boundary;
+- relevant LLD path;
+- violated invariant;
+- why the fix belongs at this layer;
+- alternatives/trade-offs;
+- test strategy and important failure cases;
+- related existing work and maintainer direction;
+- which parts were human reasoning vs AI assistance.
 
-For non-trivial architectural changes, prefer:
-reproduce → gather evidence → discuss direction → implement.
+Preferred PR story:
 
-The PR should normally communicate:
-
-problem → reproduction → root cause → change → rationale → verification.
+```text
+problem
+→ reproduction
+→ root cause / contract gap
+→ bounded change
+→ rationale
+→ regression + validation
+→ known limits
+```
 
 Do not submit:
 
 - speculative fixes for unobserved problems;
-- cosmetic changes for contribution credit;
-- broad AI-generated refactors without demonstrated need;
-- changes I cannot technically explain;
-- fixes whose usefulness to the project is unclear.
+- broad AI-generated refactors;
+- cosmetic PRs for contribution count;
+- changes whose behavior the human cannot explain;
+- changes with no clear usefulness to the project.
+
+## 10. Proof-Velocity Review
+
+Apply `PROGRESS_GATES.md` weekly.
+
+If two consecutive weeks produce only private learning, rescore the candidate.
+Try a narrower/adjacent issue in the same subsystem before abandoning a strong
+repository, but do not sacrifice a month to a contribution surface with no
+credible maintainer path.
