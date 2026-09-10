@@ -43,6 +43,9 @@ Cross-cutting skills:
   actually happened.
 - **Interface/protocol semantics** — honest guarantees between SDK, controller,
   runtime, driver, browser, and sandbox layers.
+- **Isolation & resource boundaries** — understand which process/session/tenant/
+  sandbox may affect which other resource, especially when recovery or reuse
+  occurs.
 
 See `FUNDAMENTALS.md` for the reusable engineering model.
 
@@ -63,6 +66,31 @@ Use repositories sequentially as laboratories for the same reliability ideas:
 
 At any time there is exactly one active repository, one active subsystem, and
 one primary engineering question.
+
+## Target-Market Gap Coverage
+
+The roadmap is designed to close the highest-value gaps repeatedly appearing in
+agent-infrastructure roles without trying to master every systems topic.
+
+| Target capability | Where it is built |
+| --- | --- |
+| runtime/process lifecycle and recovery | CUA first; reinforced everywhere |
+| durable agent execution and state continuity | Rivet agentOS |
+| browser/computer execution reliability | CUA + Browser Harness |
+| retries, idempotency, uncertain outcomes | CUA + Rivet |
+| cancellation and terminal/quiescent semantics | Rivet |
+| sandbox/control-plane lifecycle | E2B |
+| distributed state, reconciliation, cleanup | Rivet + E2B |
+| observability for failure diagnosis | every investigation; strongest in Rivet/E2B |
+| isolation/resource-boundary reasoning | CUA/browser sessions/sandboxes; deeper in E2B |
+| systems-language exposure | Rust/TS/Go/Python only as required by real contribution paths |
+| open-source engineering and maintainer collaboration | CUA anchor + selected transfer communities |
+| production-shaped debugging stories | every contribution must start from evidence and an invariant |
+
+Supporting topics such as cloud orchestration, virtualization, networking,
+storage, Kubernetes, Firecracker, performance, and multi-tenancy are pulled in
+**only when the active failure crosses those boundaries**. They are not separate
+curricula.
 
 ## Evidence Required After Six Months
 
@@ -160,6 +188,7 @@ problem and naturally ask:
 - Is retry/replay safe?
 - What does cancellation actually guarantee?
 - Who reconciles stored/observed state with reality?
+- What isolation/resource boundary must not be crossed during recovery?
 - What evidence would distinguish the failure cases?
 - What regression test should protect the invariant?
 
