@@ -157,6 +157,23 @@ failure are not necessarily equivalent.
 
 Always ask: **what does this result allow the caller to safely conclude?**
 
+### Isolation & Resource Boundaries
+
+Agent runtimes frequently reuse browsers, sessions, workers, credentials, files,
+or sandboxes. Reliability work must also preserve isolation.
+
+Ask:
+
+- Which process/session/tenant owns this resource?
+- Can stale recovery accidentally rebind another tenant/session?
+- Does replacement preserve or violate credential/browser/workspace boundaries?
+- Can cleanup of one generation destroy another generation's live resource?
+- Does shared infrastructure leak effects, input, files, state, or authority?
+
+Do not make security/isolation a separate six-month curriculum, but treat it as a
+required correctness dimension whenever lifecycle/recovery crosses an ownership
+boundary.
+
 ## 4. HLD Contract
 
 For each active subsystem, the human should gradually be able to reconstruct
