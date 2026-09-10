@@ -1,336 +1,383 @@
-# Agent Infrastructure Specialization — Workflow
+# Agent Runtime Reliability — Workflow
 
-This file defines **how this specialization workspace is operated and maintained**.
+This file defines **how the six-month specialization operates**.
 
-It does not own the six-month goal, current roadmap, contribution-selection criteria, discovered patterns, or interview evidence. Those responsibilities belong to the files listed below.
+It should keep the workspace focused on three outcomes:
 
----
+1. transferable agent-runtime judgment;
+2. maintainer-visible open-source proof;
+3. progressive human independence in architecture, failure reasoning, and test
+   intent.
 
 ## 1. Source-of-Truth Hierarchy
 
-Use the files in this order depending on the question being answered:
+- `NORTH_STAR.md` — destination, professional identity, six-month success.
+- `FUNDAMENTALS.md` — repeated agent-runtime concepts, HLD/LLD contracts,
+  failure families.
+- `PROGRESS_GATES.md` — assistance levels, proof stages, daily/weekly/monthly
+  checkpoints, retention and course correction.
+- `ROADMAP.md` — active repo/subsystem and future sequence.
+- `CONTRIBUTION_FILTER.md` — what deserves serious time.
+- `PATTERN_LEDGER.md` — invariants earned from real investigations.
+- `INTERVIEW_EVIDENCE.md` — work the human actually performed and can defend.
+- `AGENTS.md` — Codex orchestration behavior.
 
-- `NORTH_STAR.md` — **Why / destination**
-- `AGENTS.md` — **How Codex orchestrates routine workflow transitions**
-- `WORKFLOW.md` — **How the specialization workspace operates**
-- `ROADMAP.md` — **Which repository/subsystem is active and what comes next**
-- `CONTRIBUTION_FILTER.md` — **What deserves serious engineering time**
-- `PATTERN_LEDGER.md` — **What generalizes across systems**
-- `INTERVIEW_EVIDENCE.md` — **What I can prove I actually did**
+Repository-specific learning workspaces own detailed source paths, experiments,
+exact live questions, diagrams, and current stopping boundaries.
 
-Repository-specific workspaces such as `cua-learning/` own detailed investigation state: code paths, hypotheses, tests, failures, diagrams, and the **exact active engineering question**.
-
-Do not duplicate detailed repository investigation notes into this repository. Promote only durable conclusions.
-
-### Exact-question ownership
-
-The global roadmap should remain stable at the repository/subsystem level.
-
-For example:
-
-```text
-ROADMAP.md
-→ active repository: CUA
-→ active subsystem: daemon / runtime lifecycle
-
-cua-learning/CURRENT.md
-→ exact current engineering question
-→ current stopping boundary inside that investigation
-```
-
-Do not copy every short-lived repository question into `ROADMAP.md`.
-
----
+Do not duplicate detailed investigation history into this global repository.
 
 ## 2. One Active Workstream
 
-At any time there must be exactly:
+At any moment there is exactly:
 
-- **one active repository**
-- **one active subsystem**
-- **one primary engineering question**
+- one active repository;
+- one active subsystem;
+- one primary engineering question.
 
-I do not work effectively across multiple repositories simultaneously.
+Other repositories may be scanned briefly for roadmap validation or future
+comparison, but do not become parallel learning tracks.
 
-Other repositories may be briefly inspected for comparison or recorded as future candidates, but they do not become active workstreams.
+## 3. Primary Operating Loop
 
-A new issue, release, hiring post, Discord discussion, or interesting repository is not by itself a reason to switch.
-
-### Repository-switch rule
-
-Switch only when one of these is true:
-
-1. the active subsystem has reached the stopping boundary in `ROADMAP.md`;
-2. meaningful contribution opportunities are exhausted after serious investigation;
-3. maintainers indicate the intended direction is not useful or feasible; or
-4. evidence shows another subsystem is the natural continuation of the same specialization thread.
-
-Do not switch because of novelty, temporary difficulty, an easier issue elsewhere, or a desire to collect repository logos.
-
----
-
-## 3. What Each Global File Owns
-
-### `NORTH_STAR.md`
-
-Owns the long-term specialization goal and definition of success.
-
-Update only when the six-month objective, intended specialization, or overall build direction materially changes.
-
-It should change rarely.
-
-### `AGENTS.md`
-
-Owns Codex's global orchestration behavior:
-
-- fresh-session routing;
-- routine workflow-mode transitions;
-- when global strategy should be consulted;
-- autonomous checkpoint routing;
-- human approval gates;
-- promotion from repository-specific evidence into global artifacts.
-
-It should not duplicate repository-specific source paths or experiment details.
-
-### `ROADMAP.md`
-
-Owns:
-
-- active repository;
-- active subsystem;
-- subsystem-level objective;
-- global stopping boundary;
-- next likely subsystem;
-- future candidates worth remembering.
-
-The exact active engineering question belongs to the active repository's `CURRENT.md`.
-
-Update `ROADMAP.md` when the active subsystem changes, its stopping boundary is reached, or a future candidate should be recorded.
-
-### `CONTRIBUTION_FILTER.md`
-
-Owns the reusable criteria for deciding whether a subsystem, issue, investigation, or PR deserves significant time.
-
-Do not store specific issue backlogs here. The rules should survive individual issues being opened and closed.
-
-Update only when real experience reveals a better selection rule.
-
-### `PATTERN_LEDGER.md`
-
-Owns generalized engineering invariants and repeated failure patterns.
-
-Organize by **invariant/failure class**, not by repository.
-
-Only work I have personally investigated should be recorded as evidence. Uninvestigated cross-repo examples must be labeled as **comparison candidates**, not evidence.
-
-### `INTERVIEW_EVIDENCE.md`
-
-Owns evidence from work I have actually performed.
-
-Do not pre-fill hypothetical achievements or infer contributions.
-
-Capture interview-worthy investigations while they are fresh: problem, HLD, lifecycle, relevant LLD, reproduction, invariant, root cause or corrected assumption, alternatives, chosen design/conclusion, tests, maintainer feedback, result, and follow-up questions.
-
----
-
-## 4. Fresh Session Startup
-
-A fresh ChatGPT/Codex session should first establish:
-
-1. the North Star;
-2. the active repository;
-3. the active subsystem;
-4. the global stopping boundary;
-5. the exact current engineering question from the active repository workspace.
-
-Then read the active repository's `CURRENT.md` and only the subsystem/investigation material required for the current work.
-
-Do **not** reload every global file for every coding step.
-
-Read the global strategy files when making a strategic decision such as:
-
-- choosing a subsystem;
-- choosing or seriously evaluating an issue/PR;
-- deciding whether to switch repositories;
-- promoting a failure into a reusable pattern;
-- deciding whether repeated observations justify tooling;
-- reviewing overall progress.
-
-Codex should follow `AGENTS.md` to make these routing decisions proactively rather than waiting for the human to request each transition.
-
----
-
-## 5. Workflow Transition Ownership
-
-Routine transitions are orchestration work, not something the human should have to micromanage.
-
-Codex should proactively decide when to:
-
-- continue explanation;
-- ask the human to explain a model back;
-- inspect the minimum relevant source;
-- stop source inspection because further reading has diminishing value;
-- design an experiment;
-- require a prediction before a break;
-- run the experiment or hand one command at a time to the human;
-- checkpoint durable learning;
-- inspect issue/PR/design history;
-- begin systematic debugging;
-- move from root cause into design alternatives;
-- move from approved design into implementation/verification;
-- extract transferable patterns or interview evidence.
-
-The human still owns actual understanding, important predictions, architecture choices, contribution commitment, and approval of meaningful implementation direction.
-
----
-
-## 6. Investigation → Update Routing
-
-After a meaningful investigation, update only the files whose responsibility actually changed.
-
-### Repository-specific understanding changed
-
-Update the active repository workspace:
-
-- `CURRENT.md`;
-- subsystem note;
-- investigation/failure notes;
-- durable diagrams if useful.
-
-Codex may do this autonomously at natural checkpoints. A separate handoff prompt is not required merely to keep routine state current.
-
-### A reusable invariant emerged
-
-Update `PATTERN_LEDGER.md`.
-
-Do not promote a guess. Record evidence from the real investigation and mark untested comparisons as candidates.
-
-### The work became interview evidence
-
-Update `INTERVIEW_EVIDENCE.md`.
-
-Only include work I actually performed and can defend technically.
-
-### Active/next subsystem changed
-
-Update `ROADMAP.md`.
-
-### Experience changed how work should be selected
-
-Update `CONTRIBUTION_FILTER.md`.
-
-### The six-month objective itself changed
-
-Only then update `NORTH_STAR.md`.
-
----
-
-## 7. Knowledge Promotion Path
-
-Knowledge should move upward through evidence, not through speculation:
+Every serious repository block should follow this direction:
 
 ```text
-raw investigation
-        ↓
-repo-specific subsystem understanding
-        ↓
-real failure / issue / contribution
-        ↓
-generalized invariant
-        ↓
-cross-repository confirmation
-        ↓
-reusable failure scenario
-        ↓
-automated failure-testing primitive
-        ↓
-future runtime/harness design
+contribution / market surface scan
+→ guided orientation
+→ healthy execution path
+→ small HLD
+→ contribution-shaped failure question
+→ reproduction / evidence
+→ relevant LLD only
+→ invariant / root cause / corrected assumption
+→ maintainer alignment when needed
+→ regression / design
+→ implementation
+→ review / merge / outcome
+→ transferable pattern
 ```
 
-Do not jump from reading code directly to building a generic library or framework.
+This is not rigid chronology. For example, an existing issue may provide the
+failure question before the HLD is complete. The rule is to learn only enough
+architecture to reason correctly about the active engineering problem.
 
-The connected engineering model should remain:
+## 4. Future Repository Activation
+
+Before spending a week learning a planned future repo, apply the primary-repo
+activation gate in `CONTRIBUTION_FILTER.md`.
+
+The scan should answer:
+
+- Does the selected subsystem still map to current agent-runtime roles?
+- Are there multiple current issues/PRs around the failure family?
+- Do outside contributors receive substantive review/merge?
+- Is there a real maintainer/community route?
+- Can the failure be reproduced or regression-tested with available resources?
+- Can repeated work make the contributor recognizable rather than anonymous?
+
+Only after this scan should guided reverse engineering begin.
+
+Do not spend two weeks understanding a subsystem and only then discover that no
+credible contribution surface exists.
+
+## 5. Learning Method by Assistance Level
+
+The target is **progressive transfer of reasoning ownership**, not AI avoidance.
+
+### GUIDED
+
+Use when terms/system roles are unfamiliar.
+
+Sequence:
 
 ```text
-HLD
- ↓
-lifecycle / data flow
- ↓
-relevant LLD
- ↓
-failure
- ↓
-invariant
- ↓
-root cause / corrected assumption
- ↓
-design alternatives
- ↓
-fix / experiment
- ↓
-regression proof
- ↓
-reusable lesson
+teach plain-language role
+→ locate actual component/process/type
+→ show who calls it and what it owns
+→ observe healthy path
+→ read minimum relevant source
+→ human explains simple relationships back
 ```
 
----
+Codex may suggest likely failure boundaries and nearest tests.
 
-## 8. Issue / PR Discovery Gate
+### SHARED
 
-Do not search for upstream work merely because something looks strange.
+The human reconstructs part of the HLD, request path, failure prediction, or test
+intent first. Codex verifies and fills exact repository details.
 
-Before issue/PR discovery becomes the main activity, establish enough repository-specific understanding to answer:
+### USER-LED
 
-- what behavior is expected;
-- what behavior is actually observed/source-established;
-- where the relevant failure/design boundary is;
-- which active subsystem question this work advances.
+The human originates the engineering question, invariant, failure variation, or
+regression intent. Codex accelerates evidence gathering and implementation.
 
-Then read `ROADMAP.md` and apply `CONTRIBUTION_FILTER.md` before committing serious time.
+### TRANSFER
 
-An interesting but misaligned issue should normally be recorded as a future candidate rather than turning into a second active workstream.
+In a new system, the human recognizes familiar reliability questions before
+being told the project-specific solution.
 
----
+Track these levels in the active repository `CURRENT.md` and review them weekly
+using `PROGRESS_GATES.md`.
 
-## 9. Failure-Suite Promotion Rule
+## 6. HLD Rule
 
-Failure-suite development happens **alongside real repository work**, but it must not become a second active project.
+HLD is the **small durable model needed to reason about the subsystem**, not a map
+of the whole repository.
 
-When a useful failure is discovered:
+The human should gradually be able to explain:
 
-1. reproduce it in the real system;
-2. understand the violated invariant;
-3. investigate/fix/contribute where appropriate;
-4. record the generalized failure scenario;
-5. look for the same failure class when later working in another system;
-6. only after repeated evidence, extract reusable automation.
+- problem solved by the subsystem;
+- 3–7 important components;
+- responsibilities and state ownership;
+- healthy control/execution path;
+- durable vs process/generation-local state;
+- lifecycle/readiness states;
+- important independent failure boundaries;
+- recovery/cleanup owner.
 
-A failure scenario can begin as documentation. Generic code is justified only when the pattern has repeated enough to support an abstraction.
+If a diagram cannot be redrawn from memory at roughly this level, it is probably
+too detailed for the HLD.
 
-The eventual failure lab and agent runtime/harness must be **evidence-derived**, not designed in advance from assumptions.
+## 7. LLD Rule
 
----
+LLD is **problem-shaped**.
 
-## 10. Periodic Strategy Review
+For the active failure/feature, inspect only the important implementation
+landmarks:
 
-Approximately every 3–4 weeks, review the specialization as a whole:
+```text
+entry
+→ transport
+→ state/types
+→ effect boundary
+→ result/error
+→ recovery/cleanup
+→ nearest tests
+```
 
-- Am I still going deep rather than hopping?
-- Has understanding turned into failure reproduction or engineering evidence?
-- Have investigations turned into useful maintainer-visible contributions?
-- Are repeated invariants emerging across systems?
-- Is interview evidence accumulating from real work?
-- Am I documenting too much instead of investigating?
-- Am I trying to abstract before enough repetition exists?
+Codex may initially locate these landmarks and teach only the Rust/Go/Python
+syntax needed to reason about them.
 
-Do not reorganize the workspace unless the current structure is actually blocking the work.
+Do not make language learning a prerequisite course. Language knowledge should
+accumulate through repeated real code paths.
 
----
+## 8. Failure Discovery Training
 
-## Primary Operating Principle
+Early in the specialization, Codex may teach/suggest failure families from
+`FUNDAMENTALS.md` because the human does not yet know where systems usually
+break.
 
-The goal is not to learn CUA, OpenHands, Browser Use, and E2B as four disconnected repositories.
+Progressively move toward:
 
-The goal is to understand how durable agent-execution systems are designed, how important subsystem boundaries fail, how those failures are reproduced and prevented, and which invariants transfer across implementations.
+```text
+AI proposes failure
+→ human chooses/predicts one
+→ human proposes nearby variation
+→ human recognizes failure family in another repo
+```
 
-The repositories are evidence sources for that connected engineering model.
+Do not require a prediction before the normal path and unfamiliar concepts are
+concrete enough to support one.
+
+## 9. Experiment Discipline
+
+For meaningful lifecycle experiments:
+
+1. verify the exact baseline;
+2. state the property/question being tested;
+3. make a prediction when the assistance level makes that useful;
+4. introduce one bounded break;
+5. independently observe the important external/runtime effect;
+6. separate `OBSERVED`, `SOURCE-VERIFIED`, `INFERENCE`, and `UNKNOWN`;
+7. explain what the result changes in the HLD/invariant;
+8. preserve only evidence that helps reproduction or future contribution.
+
+If a required precondition is missing, mark the experiment `NOT TESTED` rather
+than reinterpreting the result.
+
+## 10. Test-Design Training
+
+Human ownership of test strategy is an **end-state**, not a Month-1 prerequisite.
+
+Progression:
+
+```text
+GUIDED
+AI locates existing harness/tests and explains what they protect
+human explains the property that matters
+
+SHARED
+human states setup/fault/observable/assertion
+AI translates into repo-native test code
+
+USER-LED
+human originates invariant + regression/failure cases
+AI reviews and implements unfamiliar syntax
+
+TRANSFER
+human recognizes what must be tested in a new runtime before repository search
+```
+
+Measure who owns **test intent**, not who typed the syntax.
+
+## 11. Evidence Conversion
+
+Private understanding must move toward the proof ladder in
+`PROGRESS_GATES.md`.
+
+After at most two source/docs-heavy sessions, the next meaningful session should
+produce at least one of:
+
+- explain-back / HLD reconstruction;
+- prediction;
+- controlled experiment;
+- failure reproduction;
+- existing issue/PR analysis;
+- regression test intent;
+- design/contract decision;
+- maintainer-facing evidence.
+
+Additional source reading is justified only if it unblocks one of those.
+
+## 12. Maintainer Relationship
+
+Treat maintainer recognition as a result of repeated useful work, not networking
+ceremony.
+
+Prefer:
+
+```text
+reproduction
+→ useful issue evidence / focused architecture question
+→ maintainer feedback
+→ bounded regression/fix
+→ thoughtful review response
+→ related follow-up when real
+```
+
+Do not optimize for comment count or PR count.
+
+The anchor-community goal is repeated interaction around one coherent
+subsystem/failure class.
+
+## 13. Daily / Weekly / Monthly Operation
+
+Use `PROGRESS_GATES.md` as the canonical checkpoint protocol.
+
+### Daily
+
+Start with current proof stage, assistance levels, fundamental, one engineering
+question, and desired external movement. End with a no-notes consolidation and
+update of what the human can explain unaided vs what still needs scaffolding.
+
+### Weekly
+
+Revisit the same engineering story through:
+
+- HLD;
+- LLD landmarks;
+- reproduced failure(s);
+- invariant/test intent;
+- issue/PR/maintainer state;
+- independence movement.
+
+Set one proof-stage target for the week. If the weekly checkpoint finishes early,
+depen the same active work before broadening, following `PROGRESS_GATES.md`.
+
+### Monthly
+
+Review externally inspectable proof, maintainer relationships, transferable
+fundamentals, interview story quality, and whether one AI-owned responsibility
+moved human-ward.
+
+If the monthly checkpoint finishes early, prioritize follow-up contribution,
+stronger regression/evidence, retention/transfer testing, and earned technical
+writing before activating another repo. Switch only through the roadmap gate.
+
+## 14. Course Correction
+
+Do not continue a process just because time was already invested.
+
+Trigger a review when:
+
+- a week advances neither external proof nor independence;
+- two consecutive weeks produce only private understanding;
+- roughly 7–10 focused days on one candidate still produce no credible
+  reproduction/invariant/PR-sized scope/maintainer path;
+- maintainer direction clearly makes the candidate low value;
+- required test infrastructure is unavailable.
+
+Prefer first changing the **candidate within the same subsystem**. Switch the
+repository only when the repository/subsystem gate genuinely fails or the global
+switch condition is met.
+
+## 15. Repository Switch Rule
+
+Use the gate in `ROADMAP.md` and `PROGRESS_GATES.md`.
+
+The default is:
+
+```text
+understanding
++
+maintainer-visible external proof
++
+transferable lesson
++
+continuation no longer highest-value
+→ switch
+```
+
+Do not switch for novelty or to collect repository logos.
+
+## 16. Knowledge Promotion
+
+Knowledge moves upward only after evidence:
+
+```text
+raw observation/source trace
+→ repo-specific mental model
+→ reproducible engineering result
+→ contribution / maintainer feedback
+→ supported invariant
+→ cross-repo confirmation
+→ reusable failure scenario
+→ Failure Lab primitive
+```
+
+Routing:
+
+- live repo state → active learning workspace `CURRENT.md`;
+- reusable invariant → `PATTERN_LEDGER.md`;
+- defensible personal engineering story → `INTERVIEW_EVIDENCE.md`;
+- active/next repo change → `ROADMAP.md`;
+- better selection rule → `CONTRIBUTION_FILTER.md`;
+- changed six-month objective → `NORTH_STAR.md`.
+
+Do not promote planning research or another contributor's PR as personal
+evidence.
+
+## 17. Workspace Cleanliness
+
+Keep the global repo small.
+
+Do not create files per day, per issue, or per concept. The durable global files
+have fixed responsibilities. Detailed experiments belong in repository-specific
+learning workspaces.
+
+Update existing files instead of creating parallel versions such as
+`ROADMAP_V2.md` or `FINAL_PLAN.md`.
+
+## 18. Primary Operating Principle
+
+The specialization is not:
+
+> learn CUA → learn Rivet → learn Browser Use → learn E2B.
+
+It is:
+
+> repeatedly investigate lifecycle, ownership, state continuity, execution
+> certainty, cancellation, and recovery across different agent execution layers,
+> convert that work into upstream proof, and progressively own more of the
+> engineering reasoning myself.
