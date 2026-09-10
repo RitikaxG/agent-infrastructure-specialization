@@ -356,6 +356,28 @@ Re-apply `CONTRIBUTION_FILTER.md` after the behavior is reproduced or sufficient
 source-established. Search related issues, PRs, recent changes, and maintainer
 direction before a large implementation.
 
+### Existing-work-first gate
+
+Before drafting, recommending, or asking the human to approve a new public issue,
+RFC, or pull request, perform a read-only inventory of the active subsystem's
+existing work. Inspect exact and adjacent open issues, active and recently merged
+pull requests, relevant RFCs and their implementation status, assignments, linked
+work, and recent maintainer direction.
+
+Record the short inventory and its exclusions in the active repository's
+`CURRENT.md` before external-publication consideration. Then choose the narrowest
+honest path:
+
+- a matching active PR → review or contribute there; do not create competing work;
+- a matching issue with no active PR → reproduce/clarify it and seek selection;
+- an accepted RFC → inspect implementation and parity before proposing another RFC;
+- no matching durable record → a new issue or RFC may be considered after human
+  review of the inventory;
+- a merely adjacent item → do not force the finding into it.
+
+Existing work comes first; it does not override active-subsystem alignment or
+justify pursuing an unrelated issue for contribution credit.
+
 ### When a reusable invariant is earned
 
 Update `PATTERN_LEDGER.md` only when the repository-specific investigation has

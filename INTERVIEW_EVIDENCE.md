@@ -117,9 +117,9 @@ Write only after the investigation is mature enough to explain clearly.
 
 ### Problem
 
-Understand what survives, breaks, and recovers when the long-running CUA Driver Daemon disappears while the MCP Proxy and logical session remain alive.
-
-The investigation focused first on **Daemon death between requests**, not yet on Daemon death during an actively executing tool call.
+Understand what survives, breaks, and recovers when the long-running CUA Driver
+Daemon disappears while the MCP Proxy and logical session remain alive, both
+between requests and during a side-effecting active request.
 
 ### HLD
 
@@ -203,6 +203,22 @@ Observed after replacement:
 
 After a later idle period, `get_agent_cursor_state(S1)` reported that the session had ended while both the same Proxy and replacement Daemon processes were still alive.
 
+**3. Daemon death during an active request**
+
+- established a fresh Proxy/Daemon/session and disposable Terminal baseline;
+- invoked exact-window foreground `type_text` with a 200 ms character delay and
+  a unique no-newline marker;
+- armed a one-shot observer that sent `SIGKILL` only after Terminal visibly
+  contained `CUA_MIDREQ2_`;
+- observed that the strict prefix survived while the Daemon/listener vanished;
+- observed the same Proxy call return `daemon closed connection without
+  response`;
+- performed no automatic or manual replay of the ambiguous action.
+
+An earlier fixed-delay attempt killed the Daemon before connection and produced
+`Connection refused` with no marker. It was correctly classified as NOT TESTED
+for active execution rather than reinterpreted as the desired reproduction.
+
 ### Invariant / corrected mental model
 
 The most important corrected model was:
@@ -216,6 +232,17 @@ logical session identity continuity
 The replacement behavior is **identity reuse + fresh state creation**, not restoration of old Daemon process memory.
 
 The persistent control connection is not a universal admission gate for every session-owned action. Its important role is immediate owner-liveness cleanup through EOF. If that control relationship is lost during Daemon replacement and not restored, normal inactivity-based lifecycle cleanup still bounds lazily recreated state.
+
+The active-request invariant is:
+
+```text
+no trustworthy completion response after request delivery begins
+→ execution outcome is unknown
+→ transport failure must not imply not-executed or safe-to-retry
+```
+
+The Proxy can know that no final response arrived; independent external-state
+observation is required to determine or reconcile the effect.
 
 ### Root cause / corrected assumption
 
@@ -243,11 +270,35 @@ Allow a non-ended logical session identity to be admitted by the replacement and
 
 Observed CUA behavior matched this model for the tested cursor operation.
 
+For interrupted-action reporting, three contribution approaches were compared:
+
+#### Option C — wording only
+
+Improve comments/errors but leave agents and SDK callers without structured
+completion knowledge.
+
+#### Option D — SDK parity only
+
+Reuse `ActionInterrupted` for ordinary SDK Daemon actions but leave MCP generic.
+
+#### Option E — shared SDK and MCP classification
+
+Classify `NotStarted` before the first write attempt and `Unknown` afterward in
+the common Daemon client, then map that knowledge to existing SDK
+`ActionInterrupted` and additive MCP error data. Keep retry decisions with the
+agent.
+
 ### Chosen approach / conclusion
 
-No fix was chosen because this investigation has not established that the between-request replacement behavior is itself defective.
+No fix was chosen for between-request replacement because that behavior was not
+established as defective.
 
-The current conclusion is to preserve the actual contract precisely, then move to the next reliability boundary: **Daemon death during an active request**, where action execution and response delivery may become ambiguous.
+For active-request interruption, the human selected the shared SDK-and-MCP
+classification direction as a maintainer discussion proposal. The approved
+ownership model is: tools prevent predictable ambiguity where possible; the
+transport reports conservative completion knowledge; a supervisor/host restores
+availability only; the agent observes external state and reconciles intent. No
+implementation or upstream claim has begun.
 
 ### What I personally did
 
@@ -258,6 +309,12 @@ The current conclusion is to preserve the actual contract precisely, then move t
 - compared prediction against runtime evidence;
 - corrected the mental model after the stateful replacement call succeeded;
 - used bounded source traces to understand lazy admission, control-connection semantics, and idle cleanup;
+- designed and interpreted an effect-conditioned active-request failure
+  reproduction;
+- separated failure cause from client-visible completion knowledge;
+- explained why the agent, rather than transport or supervisor, owns semantic
+  recovery;
+- compared wording-only, SDK-only, and shared SDK/MCP contract alternatives;
 - kept runtime observation, source-verified behavior, inference, and untested boundaries separate.
 
 AI/Codex assisted with repository/source tracing and explanation; the runtime predictions, experiment interpretation, and resulting engineering model are the learning evidence being preserved here.
@@ -270,6 +327,8 @@ AI/Codex assisted with repository/source tracing and explanation; the runtime pr
 - manually restored replacement Daemon was reachable through the same Proxy;
 - old S1 was accepted for a clearly session-owned cursor operation;
 - later the same S1 was ended/rejected while the same Proxy and replacement Daemon remained alive.
+- delayed `type_text` left a strict Terminal prefix before Daemon death;
+- the Proxy received EOF/no response and did not replay the action.
 
 **SOURCE-VERIFIED**
 
@@ -280,6 +339,10 @@ AI/Codex assisted with repository/source tracing and explanation; the runtime pr
 - roughly 30-second lifecycle maintenance sweep;
 - in-flight protection and normal end/cleanup fan-out;
 - cursor/config cleanup path.
+- execution precedes final Daemon response construction;
+- ordinary Daemon/MCP errors collapse transport phases;
+- private-worker, remote, and trusted-service SDK paths already expose
+  `ActionInterrupted(NotStarted|Unknown)` semantics.
 
 **INFERENCE**
 
@@ -297,11 +360,20 @@ Issue: none claimed yet
 
 PR: none yet
 
-Outcome: between-request Daemon replacement/session-recovery model is understood well enough to move to the active-request failure boundary.
+Outcome: between-request replacement/session recovery and active-request
+execution/acknowledgement ambiguity are GREEN enough. A deeper RFC audit found
+that RFC 2549 already requires honest interrupted-action completion reporting;
+the observed ordinary Daemon/MCP behavior is now framed as a focused
+implementation/parity bug candidate rather than a new RFC. No upstream issue or
+implementation has begun.
 
 ### Generalized lesson
 
 A logical identifier surviving a physical runtime replacement does not imply that the old runtime's state or liveness relationship survived.
+
+A response-less transport failure after request delivery begins also does not
+imply non-execution. Availability restoration, completion reporting, and
+semantic recovery are separate responsibilities.
 
 When evaluating another agent runtime, explicitly ask:
 
@@ -318,6 +390,18 @@ I investigated CUA's Driver Runtime lifecycle by separating the MCP Proxy from t
 The more interesting result came after manually starting a replacement Daemon. I originally expected stateless calls to recover but session-owned work to fail because the replacement had never received the Proxy's persistent `session_begin`. That prediction was wrong. The same old session id successfully performed a cursor-state operation. Tracing the lifecycle code showed the replacement can lazily admit an unknown non-ended session id and create fresh process-local lifecycle state under it.
 
 That changed my model: the Proxy owns logical identity continuity, while the Daemon owns runtime state. Reusing the same session id is not state recovery. The persistent control connection is mainly an immediate liveness/cleanup signal; after replacement it was not re-established, but idle lifecycle cleanup still existed. Later the same session became ended while both Proxy and replacement Daemon were alive, consistent with that fallback. The next reliability question is what happens if the Daemon dies during an active side-effecting request, where the caller may not know whether the action happened before the response disappeared.
+
+I then reproduced that active-request boundary with delayed typing into a
+disposable Terminal. I killed the Daemon only after a strict prefix was visible.
+The prefix survived, but the Proxy received only a response-less transport
+error. That proved the response path cannot establish whether execution was
+absent, partial, or complete. Source tracing showed the ordinary Daemon/MCP path
+collapses these phases, while newer SDK worker, remote, and trusted-service
+topologies already expose `ActionInterrupted` completion knowledge. The design
+direction I selected is to align SDK and MCP reporting around conservative
+`NotStarted` versus `Unknown` classification, without automatic retry or
+exactly-once claims; the agent remains responsible for observing and reconciling
+external state.
 
 ### Likely interviewer follow-up questions
 

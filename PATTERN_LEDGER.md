@@ -148,6 +148,87 @@ Do not implement this generically until another personally investigated system c
 
 ---
 
+## INV-003 — Post-dispatch transport failure means execution outcome is unknown
+
+**Status: SUPPORTED**
+
+### General invariant
+
+If an action request may have crossed an execution boundary but no trustworthy
+completion response arrives, the caller must treat execution as unknown. A
+transport error must not imply “not executed” or “safe to retry.”
+
+`NotStarted` is defensible only before the first write/delivery attempt begins.
+After delivery begins, the recovery owner must observe authoritative external
+state and reconcile the original intent before deciding on another action.
+
+### Evidence personally investigated
+
+#### CUA
+
+Subsystem: Driver Runtime / active-request Daemon lifecycle
+
+Investigation: Daemon death during delayed, non-idempotent `type_text`
+
+Observed behavior:
+
+- an effect-conditioned experiment killed only the Daemon after a disposable
+  Terminal visibly contained the strict prefix `CUA_MIDREQ2_`;
+- the Terminal effect survived while the Daemon/listener disappeared;
+- the surviving Proxy returned only `daemon closed connection without response`;
+- no automatic Proxy replay occurred;
+- a separate invalid attempt in which the Daemon was already unavailable
+  produced `Connection refused` with no marker, establishing the contrasting
+  pre-dispatch boundary.
+
+Source-verified context:
+
+- the ordinary Daemon request has no request id, idempotency key, attempt number,
+  or deduplication key;
+- the Daemon executes `tool.invoke(...)` before constructing the final response;
+- the Proxy sends one request and does not replay it;
+- private-worker, remote, and trusted-service SDK topologies already expose
+  `ActionInterrupted` with `NotStarted` / `Unknown` completion semantics, while
+  ordinary Daemon/MCP transport errors remain collapsed.
+
+### Comparison candidates
+
+- OpenHands — action emitted versus observation lost across runtime interruption
+- Browser Use — browser action applied versus CDP response/control loss
+- E2B — sandbox command/effect committed versus stream/response loss
+
+These are comparison targets, not completed evidence.
+
+### General lesson
+
+Separate three concerns:
+
+```text
+availability owner → restore the executor/runtime
+transport          → report completion knowledge conservatively
+agent/workflow     → observe external state and reconcile intent
+```
+
+Tool-specific prevention or progress reporting should reduce predictable
+ambiguity, but unavoidable process/transport loss still needs an explicit
+`Unknown` completion state.
+
+### Failure-lab candidate
+
+```text
+begin non-idempotent observable action
+wait until a strict external prefix/effect exists
+kill the executor before its final response
+assert external effect survives
+assert caller reports completion = unknown
+assert no automatic logical replay occurs
+```
+
+Do not generalize into reusable automation until another personally investigated
+runtime confirms the same failure class.
+
+---
+
 ## Entry Template
 
 ```markdown

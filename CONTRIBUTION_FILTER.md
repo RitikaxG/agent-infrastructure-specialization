@@ -82,7 +82,33 @@ over cosmetic or unrelated changes.
 
 Can this become a test that prevents the failure class from returning?
 
-## 7. Maintainer alignment
+## 7. Existing-work and external-artifact gate
+
+Before drafting or proposing a new public issue, RFC, or PR, first make a
+read-only inventory of the active subsystem's exact and adjacent existing work:
+
+- open issues and their assignments, labels, milestones, and linked work;
+- active pull requests and recently merged pull requests that may already own the
+  behavior;
+- relevant RFCs, their decisions, and implementation/completion status; and
+- recent maintainer direction or review feedback.
+
+Classify the result before choosing an external artifact:
+
+- matching active PR → review or contribute there;
+- matching issue without an active PR → reproduce/clarify it, then seek selection;
+- accepted RFC → inspect whether the observed gap is already implemented,
+  deliberately deferred, or a genuine parity/follow-up gap;
+- no matching durable record → a new issue or RFC may be considered; or
+- only adjacent work → keep the finding distinct rather than forcing a false
+  duplicate relationship.
+
+Record the inventory, key exclusions, and chosen path in the active repository's
+durable current state before asking for external-publication approval. This gate
+does not replace subsystem alignment, reproducibility, or human contribution
+commitment.
+
+## 8. Maintainer alignment
 
 Before a large implementation:
 
@@ -92,14 +118,14 @@ Before a large implementation:
 - post evidence if useful
 - confirm direction when blast radius is high
 
-## 8. Transferability
+## 9. Transferability
 
 Have I seen, or could I reasonably expect to see, this failure class
 in another agent runtime?
 
 High transferability = high learning value.
 
-## 9. PR submission gate
+## 10. PR submission gate
 
 Finding something that could be changed is not sufficient justification
 for a pull request.
