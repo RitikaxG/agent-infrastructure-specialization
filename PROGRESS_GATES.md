@@ -352,3 +352,79 @@ Target:
 - 2–3 reusable invariants with cross-system evidence where possible;
 - Agent Runtime Failure Lab v0.1 derived from real investigations;
 - technical writing and interview narratives grounded in actual upstream work.
+
+## 12. Throughput and Leverage
+
+Do not use working hours, number of tabs, number of AI calls, or number of tasks
+as the primary productivity metric.
+
+The long-term productivity goal is to reduce the cycle time for one serious
+engineering story:
+
+```text
+question
+→ compact system model
+→ relevant source path
+→ failure evidence
+→ invariant / test intent
+→ maintainer-visible artifact
+→ review / merge
+```
+
+### Output-density rule
+
+A strong focused day may produce only one substantial result: a corrected HLD,
+a deterministic reproduction, a regression design, a maintainer-facing problem
+statement, a review response, or a focused patch. Prefer one result that moves
+proof or judgment over many disconnected tasks.
+
+A 10–12 hour day with no proof movement or independence gain is not automatically
+more productive than a 5–6 focused-hour day that advances the engineering story.
+
+### Orientation-tax rule
+
+Track whether time is repeatedly spent relearning a concept or rediscovering the
+same source/test path.
+
+If the same orientation cost recurs across two or more sessions:
+
+1. do a no-notes recall first;
+2. identify the smallest missing mental model or landmark;
+3. repair the compact durable note/diagram only if retrieval is genuinely poor;
+4. avoid broad rereading;
+5. automate mechanical rediscovery when appropriate.
+
+The expected trend over months is:
+
+```text
+less time finding/remembering familiar boundaries
++
+more time reproducing, testing, designing, reviewing, and contributing
+```
+
+### AI-leverage rule
+
+Once the human understands the intent and important invariant, Codex should take
+more of the mechanical load where useful: repository search, exact symbol
+location, repetitive setup, test execution, log comparison, syntax translation,
+and implementation scaffolding.
+
+Do not make the human manually repeat work that teaches nothing new merely to
+prove independence. Independence means owning the engineering judgment, not
+refusing leverage.
+
+### Compounding-leverage review
+
+At each monthly checkpoint ask:
+
+- Which task that took hours last month is now faster, and why?
+- Which agent-infra question now occurs to me automatically?
+- Which source/test workflow is now familiar enough to delegate mechanically?
+- Where am I still repeatedly paying orientation cost?
+- Did faster execution come from stronger mental models and reusable process, or
+  only from asking AI to do more thinking for me?
+
+If cycle time is not improving after repeated exposure to the same subsystem or
+failure family, diagnose the bottleneck: weak retention, unclear HLD, excessive
+source scope, poor test setup, contribution uncertainty, or too much context
+switching. Fix the bottleneck rather than extending the workday.
