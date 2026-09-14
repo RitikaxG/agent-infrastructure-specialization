@@ -49,6 +49,7 @@ question.
 | `FUNDAMENTALS.md` | the repeated agent-runtime fundamentals, HLD/LLD model, failure families |
 | `PROGRESS_GATES.md` | independence ladder, proof stages, daily/weekly/monthly checkpoints |
 | `ROADMAP.md` | CUA → Rivet → Browser Harness → E2B → capstone |
+| `TARGET_COMPANIES.md` | living YC/non-YC hiring market, access constraints, evidence-triggered outreach |
 | `CONTRIBUTION_FILTER.md` | repo/subsystem/issue + maintainer-viability selection rules |
 | `PATTERN_LEDGER.md` | invariants earned from real personal investigations |
 | `INTERVIEW_EVIDENCE.md` | externally defensible engineering work actually performed |
@@ -85,4 +86,6 @@ A strong six-month result is roughly:
   roles.
 
 Start with `NORTH_STAR.md`, then `ROADMAP.md`, then use `AGENTS.md` and
-`PROGRESS_GATES.md` to run the work.
+`PROGRESS_GATES.md` to run the work. Use `TARGET_COMPANIES.md` to decide where
+earned proof should be directed; do not use it to create parallel learning
+workstreams.
