@@ -33,13 +33,10 @@ problems**, not four independent technologies to learn.
 
 ## Current Focus
 
-**Anchor repository:** CUA  
-**Active subsystem:** Driver Runtime / Daemon lifecycle  
-**Current proof direction:** convert reproduced active-request execution
-uncertainty into maintainer-visible contribution evidence.
-
-See the active `../cua-learning/CURRENT.md` for the exact live engineering
-question.
+The active repository and learning workspace are declared in
+`WORKSTREAMS.json`. Run `python3 tools/strategyctl.py status` for the resolved
+source, workspace, and exact engineering question. Do not duplicate issue-level
+current state here.
 
 ## Global Files
 
@@ -55,6 +52,8 @@ question.
 | `INTERVIEW_EVIDENCE.md` | externally defensible engineering work actually performed |
 | `WORKFLOW.md` | how learning becomes evidence, contribution, and transfer |
 | `AGENTS.md` | Codex orchestration rules |
+| `WORKSTREAMS.json` | active/planned repository registry and learning-workspace routing |
+| `tools/strategyctl.py` | bounded status, consistency audit, and event-driven strategy loading |
 
 ## Primary Operating Rule
 

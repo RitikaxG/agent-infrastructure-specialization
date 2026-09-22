@@ -104,6 +104,10 @@ Target evidence, not course completion:
 - deterministic or high-quality reproductions of real runtime failures;
 - HLD and relevant LLD I can explain and defend without repeating an AI answer;
 - test intent and failure reasoning increasingly originating from me;
+- bounded implementation and code-review decisions increasingly owned and
+  defended by me, even when AI accelerates syntax and mechanics;
+- production-shaped reasoning about observability, isolation, deployment,
+  incidents, scale, cost, and customer impact where the active work requires it;
 - 2–3 reusable invariants confirmed through personal work, ideally across more
   than one system;
 - 2 strong technical engineering stories/articles based on actual work;
@@ -134,6 +138,11 @@ By Month 6, Codex may still accelerate repository search, unfamiliar syntax,
 implementation, and verification. The engineering question, architecture model,
 failure hypothesis, invariant, test intent, and major trade-off should
 increasingly originate from the human.
+
+Maintainer readiness additionally requires the human to review relevant code,
+defend bounded changes, respond to feedback, triage related failures, and make
+scope decisions that serve the project rather than only complete personal
+investigations.
 
 See `PROGRESS_GATES.md` for how this is measured.
 

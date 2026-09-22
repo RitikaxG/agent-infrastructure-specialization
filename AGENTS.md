@@ -53,20 +53,23 @@ here or rewrite mature strategy merely to reduce startup context.
 
 ## Active work resolution
 
-For current CUA work:
-
-```text
-active source:   ../cua/
-learning state:  ../cua-learning/CURRENT.md
-```
+Resolve the active repository through `WORKSTREAMS.json`, then read only that
+workstream's `CURRENT.md`. `tools/strategyctl.py status` performs this lookup;
+do not duplicate the resolved paths or issue-level state here.
 
 Read CURRENT before deeper global material. Its exact question, proof and
 assistance state, human gate, pointers, and stop boundary control the next
 bounded action. Re-ground the source checkout before source/runtime claims.
 
-Do not reset the current contribution-shaped Driver Runtime/Daemon work to broad
-orientation because a chat is fresh. Do not run a new failure, implement, or
-publish merely because deeper strategy material was loaded.
+Do not reset established subsystem understanding to broad orientation because a
+chat is fresh. Do not run a new failure, implement, or publish merely because
+deeper strategy material was loaded.
+
+At a checkpoint, run `tools/strategyctl.py due <event>` and inspect only the
+files it returns. Ordinary engineering checkpoints stay inside the active
+learning workspace. Global strategy is due only for assistance movement,
+supported invariants, public proof, maintainer feedback, weekly/monthly review,
+repository switches, or objective changes.
 
 ## Evidence and progression
 

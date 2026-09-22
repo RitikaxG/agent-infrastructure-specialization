@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "active": "cua",
+  "reviews": {
+    "weekly": "2026-09-17",
+    "market": "2026-09-11"
+  },
+  "workstreams": {
+    "cua": {
+      "role": "anchor",
+      "status": "active",
+      "source": "../cua",
+      "learning": "../cua-learning",
+      "current": "CURRENT.md",
+      "roadmap_marker": "ACTIVE: CUA"
+    },
+    "rivet-agentos": {
+      "role": "transfer",
+      "status": "planned",
+      "source": "../agentos",
+      "learning": "../agentos-learning",
+      "current": "CURRENT.md"
+    },
+    "browser-harness": {
+      "role": "transfer",
+      "status": "planned",
+      "source": "../browser-harness",
+      "learning": "../browser-harness-learning",
+      "current": "CURRENT.md"
+    },
+    "e2b": {
+      "role": "systems-depth",
+      "status": "planned",
+      "source": "../e2b",
+      "learning": "../e2b-learning",
+      "current": "CURRENT.md"
+    },
+    "openhands-sdk": {
+      "role": "reserve",
+      "status": "planned",
+      "source": "../software-agent-sdk",
+      "learning": "../openhands-learning",
+      "current": "CURRENT.md"
+    }
+  }
+}

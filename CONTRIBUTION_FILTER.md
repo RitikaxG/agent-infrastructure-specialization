@@ -19,6 +19,68 @@ If not:
 - weakly transferable → skip;
 - do not create a second active workstream.
 
+Require contribution-arc fit before scoring a candidate. A technically strong
+issue that does not deepen the current subsystem, fundamental, maintainer
+relationship, or next public artifact is deferred rather than added as a
+parallel thread.
+
+### Subsystem Fit gate
+
+Before scoring or recommending serious work, produce one candidate block:
+
+```text
+ACTIVE SUBSYSTEM / RELIABILITY SPINE
+PRODUCT CAPABILITY AND USER IMPACT
+EXISTING HLD PATH REUSED
+FAILURE FAMILY
+PRIMARY FUNDAMENTAL
+NEW STABLE DELTA IF PROVEN
+TRANSFER ANALOGUE
+OWNERSHIP / DUPLICATION STATE
+MAINTAINER-VISIBLE ARTIFACT
+VALIDATION ENVIRONMENT
+TIMEBOX / KILL CONDITION
+```
+
+Reject the candidate before scoring when it cannot name a meaningful subsystem
+delta, legitimate ownership path, maintainer-visible artifact, available
+validation path, or transfer value. A candidate may be easy, recent, unassigned,
+or labelled `good first issue` and still fail this gate.
+
+Treat reporter implementation signals, issue comments, referenced commits,
+fork branches, and unlinked pull requests as part of ownership state. A blank
+assignee field or Development panel is not sufficient evidence that work is
+available. When public ownership is absent but recent behavior makes unpublished
+implementation plausible, distinguish private reproduction/evidence from
+implementation: the former still needs independent subsystem value; the latter
+needs alignment rather than a race.
+
+A maintainer-waiting public path does not require the human to stop learning or
+performing read-only candidate discovery. It may remain a retained public path
+while a poll recommends one same-subsystem replacement. Follow the active
+repository's workflow for parking and activation; never execute both as active
+sibling workstreams.
+
+Use `PROGRESS_GATES.md` for the canonical evidence-conversion, candidate-kill,
+proof-velocity, and repository-switch thresholds instead of reproducing their
+numbers here.
+
+### Contribution execution lane
+
+Classify every eligible candidate into exactly one lane before final ranking:
+
+| Lane | Use when | Next maintainer-visible artifact |
+| --- | --- | --- |
+| `PROCEED` — direct focused PR | Gap is reproduced/source-decisive; no owner or competing work; invariant and regression are clear; change is internal/additive; no RFC, security, policy, permission, compatibility, or cross-component decision is required; validation is available; the human can defend the problem, boundary, test intent, and limits. | Failing regression, minimal patch, focused validation, then an early focused PR that remains unselected until review. |
+| `CONTRIBUTE TO EXISTING WORK` | An active PR or selected owner controls the same implementation boundary. | Distinct test, evidence, review, or author-approved commit with authorship preserved. |
+| `SEEK ALIGNMENT` | Implementation depends on a public contract, policy/default, compatibility/migration, permission/trust, cross-component architecture, multiple valid product choices, maintainer-owned environment, or inseparable latent ownership. | One bounded maintainer decision. |
+| `STOP` | Duplicate, claimed without a distinct useful artifact, privately reportable security issue, unavailable validation, weak arc fit, or unbounded useful scope. | None until the recorded blocker changes. |
+
+An issue's age and empty assignee field are evidence to inspect, not a reason to
+wait and not permission to implement. Maintainer direction before source work is
+conditional on the selected lane; it is not universal. A qualifying direct fix
+uses the pull request as the first concrete review surface.
+
 ## 1. Primary Repository Activation Gate
 
 Before a repository receives multi-week investment, verify all of these.
@@ -76,6 +138,14 @@ retries/recovery, observability, or infrastructure debugging.
 If a planned repo fails this activation gate when its month arrives, preserve the
 failure family and choose a stronger current repository instead of forcing the
 logo.
+
+### External-proof conversion gate
+
+After removing blockers and scoring technical fit, prefer one strong `PROCEED`
+candidate over an equally strong `SEEK ALIGNMENT` candidate. Recommend alignment
+only when its strategic value and credible maintainer path justify waiting.
+Availability alone never outranks contribution-arc fit, but architectural
+interest alone never outranks a reviewable external artifact.
 
 ## 2. Subsystem / Issue Scorecard
 
@@ -165,14 +235,22 @@ Before drafting or recommending a new public issue, RFC, or PR, inspect:
 Then choose the narrowest honest path:
 
 - matching active PR → review/contribute there; do not compete;
-- matching issue without active implementation → reproduce/clarify and seek
-  selection;
+- assigned or maintainer-selected owner → stop unless that owner/maintainer
+  explicitly invites help or a distinct evidence/review artifact is useful;
+- matching issue without active implementation → choose `PROCEED` when the
+  direct-focused-PR predicates all hold; otherwise reproduce/clarify and use
+  `SEEK ALIGNMENT` only for the missing maintainer-owned decision;
 - accepted design → inspect implementation/parity gaps;
 - no matching durable record → new issue/RFC may be appropriate;
 - merely adjacent work → keep the finding distinct.
 
 Record the short inventory and exclusions in the active `CURRENT.md` before
 external publication.
+
+Filter ineligible issues before presenting recommendations. Do not return an
+assigned or actively owned issue as a candidate merely because it is open or has
+no linked PR. Prefer one contribution-arc-aligned candidate or `STOP` over a
+ranked list that encourages issue shopping.
 
 ## 7. Maintainer Relationship Rule
 
@@ -211,6 +289,19 @@ Ask:
 
 The human should increasingly own the **test intent** even when Codex writes
 unfamiliar Rust/Go/Python syntax.
+
+## Direct-PR Conversion Gate
+
+A `PROCEED` candidate gets one focused implementation slice to reach failing
+regression → bounded source boundary → minimal passing patch → focused
+validation → reviewable PR description. If the invariant cannot be expressed,
+scope expands into policy/architecture, ownership appears, or validation is
+unavailable, stop and reclassify; do not extend private investigation by default.
+
+Open the PR once the change is meaningfully reviewable. State the concrete
+impact, smallest behavior change, related work, red/green regression, focused
+validation, compatibility/rollback boundary, and known gaps. The PR is an
+unselected contribution until maintainer review, assignment, or merge.
 
 ## 9. PR Submission Gate
 

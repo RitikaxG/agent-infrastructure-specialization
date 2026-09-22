@@ -38,6 +38,12 @@ At any moment there is exactly:
 Other repositories may be scanned briefly for roadmap validation or future
 comparison, but do not become parallel learning tracks.
 
+Each active `CURRENT.md` also carries one **contribution arc**: a coherent
+subsystem/fundamental theme, current public artifact, next artifact, completion
+condition, and anti-fragmentation boundary. A new issue is eligible only when it
+deepens that arc or the current arc has reached its documented stop/escape
+condition.
+
 ## 3. Primary Operating Loop
 
 Every serious repository block should follow this direction:
@@ -260,6 +266,23 @@ Do not optimize for comment count or PR count.
 
 The anchor-community goal is repeated interaction around one coherent
 subsystem/failure class.
+
+Progress toward maintainer capability through:
+
+```text
+reliable reproducer
+→ focused contributor
+→ responsive review participant
+→ related follow-up contributor
+→ useful issue triage / code review
+→ subsystem design participant
+→ trusted subsystem steward
+→ maintainer or invited collaborator
+```
+
+The title is outside the human's control. Track the observable responsibilities:
+scope judgment, review quality, follow-through, release/compatibility awareness,
+and whether maintainers trust the human with a coherent subsystem surface.
 
 ## 13. Daily / Weekly / Monthly Operation
 

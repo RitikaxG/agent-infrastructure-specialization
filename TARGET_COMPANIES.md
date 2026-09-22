@@ -1,6 +1,8 @@
 # Agent Runtime Reliability — Target Companies
 
-**Last market verification:** 2026-09-11
+**Last full market verification:** 2026-09-11
+
+**Targeted role refresh:** 2026-09-17 — Rivet, Cua, Browser Use, and E2B
 
 This is the living hiring-market layer for the six-month specialization.
 
@@ -64,7 +66,7 @@ accessible today. Keep on the radar without diverting the active roadmap.
 
 | Priority | Company | YC? | Layer | Current constraint | Why keep it |
 | --- | --- | --- | --- | --- | --- |
-| **B** | **Cua** | P25 | computer-use runtime + sandbox/cloud desktop | Founding Engineer currently SF, 1+ years, US citizen/visa only | **anchor OSS community**; contribution recognition can still create future hiring/referral leverage |
+| **B** | **Cua** | P25 | computer-use runtime + sandbox/cloud desktop | Founding Engineer is SF and US citizen/visa only; detailed role text asks for 2+ years despite the YC summary showing 1+ | **anchor OSS community**; contribution recognition can still create future hiring/referral leverage |
 | **B** | **Browser Use** | W25 | browser-agent runtime/infrastructure | Software Engineer 1+ years but SF onsite; infra role 3+ | direct Browser Harness ecosystem; exceptional proof value even before location works |
 | **B** | **CharacterQuilt** | P26 | computer-use agent reliability | MTS is new-grad eligible but NYC and US citizen/visa only | near-perfect JD benchmark: workers, sandboxes, authenticated browsers, durable state, retries, cancellation, recovery |
 | **B** | **Runtime** | P26 | coding-agent harness + sandboxes | SF, 3+ years, sponsorship | roadmap match for reliable harnesses, sandbox providers, cloud infrastructure, observability |
@@ -78,7 +80,7 @@ accessible today. Keep on the radar without diverting the active roadmap.
 
 | Priority | Company | Layer | Current access signal | Strategic use |
 | --- | --- | --- | --- | --- |
-| **B/C** | **E2B** | agent sandboxes / microVM runtime | no suitable current role verified during this scan | primary Month-5 learning repo; strong technical credibility and future employer target |
+| **B/C** | **E2B** | agent sandboxes / microVM runtime | current platform/backend engineering roles are in San Francisco or Prague; access must be checked before action | primary Month-5 learning repo; strong technical credibility and future employer target |
 | **B/C** | **Browserbase** | browser infrastructure / agent platform | current engineering roles are SF full-time | market benchmark after Browser Harness work; Core Infrastructure + Agent Platform are directly relevant |
 | **B/C** | **Steel** | open-source browser infrastructure | company is hiring, but exact suitable experience/location route must be rechecked before action | strong OSS/browser-infra relationship target after Browser Harness depth |
 | **C** | **Runloop** | secure code sandboxes / agent infrastructure | current careers page confirms hiring organization but no suitable opening verified in this scan | strong long-term sandbox/runtime employer; especially relevant after E2B |

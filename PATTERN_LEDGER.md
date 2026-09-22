@@ -16,7 +16,7 @@ Uninvestigated systems may be listed only under **Comparison candidates**.
 
 ## INV-001 — Process existence does not imply readiness
 
-**Status: CANDIDATE**
+**Status: SUPPORTED**
 
 ### General invariant
 
@@ -26,13 +26,23 @@ A process/resource should not be exposed as usable until the service contract re
 
 #### CUA
 
-Subsystem: daemon lifecycle
+Subsystem: Driver Runtime / Linux accessibility readiness
 
-Investigation: in progress
+Investigation: issue #2915 controlled Chromium AT-SPI A/B
 
 Observed failure / evidence:
 
-_To be filled only from my actual CUA investigation._
+- Both isolated arms advertised `IsEnabled=true` and
+  `ScreenReaderEnabled=true`, and the GTK4 control published a healthy semantic
+  tree through both Cua and raw AT-SPI.
+- Unflagged Chromium rendered the page visually but exposed only an application
+  and bare frame, with no fixture markers; Cua returned one element without a
+  degraded classification.
+- With `--force-renderer-accessibility`, Chromium exposed the renderer tree and
+  all five fixture markers through both observers.
+- The experiment supports the boundary claim that an external readiness signal
+  and live browser shell do not establish the downstream semantic capability
+  callers require. Chromium's internal `AXMode` was not observed.
 
 ### Comparison candidates
 
@@ -43,7 +53,7 @@ These are **not evidence yet**. Revisit only when those repositories become acti
 
 ### General lesson
 
-Potential state distinction:
+Useful state distinction:
 
 - spawned
 - alive
@@ -54,7 +64,7 @@ Potential state distinction:
 
 ### Failure-lab candidate
 
-Potential reusable readiness scenario:
+Reusable readiness scenario candidate:
 
 ```text
 process alive
@@ -64,7 +74,9 @@ required endpoint/control channel unavailable
 assert system does not report READY
 ```
 
-Do not automate until the pattern is supported by real investigations.
+Do not generalize the Chromium-specific signature into a universal rule. A
+second personally investigated runtime is still required before promoting this
+to `CONFIRMED CROSS-REPO`.
 
 ---
 

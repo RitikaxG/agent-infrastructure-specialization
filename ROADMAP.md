@@ -38,8 +38,8 @@ Primary anchor community and first laboratory for runtime reliability.
 
 ### Selected subsystem
 
-**Driver Runtime → Daemon lifecycle → execution/acknowledgement boundary →
-ownership/recovery.**
+**Driver Runtime reliability:** honest readiness/capability and execution
+semantics across the Agent/Proxy/Daemon/Driver/platform boundaries.
 
 The exact live engineering question remains in:
 
@@ -68,14 +68,12 @@ Secondary:
 - external effect vs caller acknowledgement;
 - replacement runtime generation and recovery semantics.
 
-### Current external-proof direction
+### Active external-proof direction
 
-Use the already reproduced active-request Daemon-death case to decide whether to
-seek maintainer direction on distinguishing pre-dispatch failure from
-post-dispatch outcome-unknown failure.
-
-Do not restart broad daemon learning. Continue from the current CUA stopping
-boundary.
+The exact contribution arc, current public artifact, human gate, and stopping
+boundary live only in `../cua-learning/CURRENT.md`. Preserve repeated,
+maintainer-visible work inside Driver Runtime reliability rather than selecting
+disconnected issues or restarting broad repository orientation.
 
 ### Months 1–2 outcome target
 

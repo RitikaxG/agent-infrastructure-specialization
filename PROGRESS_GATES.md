@@ -16,7 +16,11 @@ Track assistance separately for:
 - LLD/source navigation;
 - failure reasoning;
 - test design;
-- contribution/design decisions.
+- contribution/design decisions;
+- implementation ownership;
+- code review;
+- operational/production reasoning;
+- maintainer communication.
 
 ### GUIDED
 
@@ -199,6 +203,23 @@ For active public work, review:
 
 Do not comment merely to remain visible.
 
+### Subsystem compounding revision
+
+Check whether the week's work accumulated judgment instead of only adding a new
+issue:
+
+- Did it reuse the established subsystem HLD rather than restart orientation?
+- Did familiar component/source discovery become faster?
+- Did the human predict the relevant owner, state, or failure boundary earlier?
+- Did implementation, code-review, product, or operational judgment deepen?
+- Did maintainer-visible proof advance?
+- Can the lesson be mapped to the next planned repository without depending on
+  repository-specific component names?
+
+If several answers are no, diagnose fragmentation before selecting another
+candidate. Use the existing evidence-conversion, two-week private-work,
+candidate-kill, and switch rules below; do not invent a parallel threshold.
+
 ## 6. Weekly Scorecard
 
 Score each dimension `0 / 1 / 2`:
@@ -213,14 +234,18 @@ Score each dimension `0 / 1 / 2`:
 | Maintainer relationship | none | one useful interaction | repeated substantive interaction |
 | Transferability | isolated fact | maps to fundamental | recognizes reusable pattern |
 | Independence | no ownership shift | one small shift | clear responsibility moved human-ward |
+| Implementation ownership | cannot explain generated patch | can review/modify a bounded slice | can implement and defend the relevant path |
+| Code review | accepts a diff at face value | identifies behavior and test risks | authors actionable review and alternatives |
+| Operational judgment | stops at local success | names observability/scale/isolation concerns | designs production-shaped validation and runbook |
+| Problem/product judgment | AI selects work | shared user impact and scope | human chooses the smallest valuable maintainer artifact |
 
-Maximum: 16.
+Maximum: 24.
 
 Interpretation:
 
-- **13–16:** strong week; keep the same direction unless the switch gate is met.
-- **9–12:** useful week; identify the weakest dimension and correct next week.
-- **0–8:** drift; do not continue unchanged without diagnosing why.
+- **19–24:** strong week; keep the same direction unless the switch gate is met.
+- **13–18:** useful week; identify the weakest dimension and correct next week.
+- **0–12:** drift; do not continue unchanged without diagnosing why.
 
 A week cannot score strongly through note-taking alone.
 
@@ -306,6 +331,15 @@ Do not confuse sunk cost with depth.
 ## 10. Repository Switch Gate
 
 Do not switch simply because the subsystem feels understood.
+
+Classify the proposed movement first:
+
+| Movement | Default |
+| --- | --- |
+| Same repository, same subsystem | Deepen the active model |
+| New repository, analogous subsystem/failure family | Deliberate transfer after this gate |
+| Same repository, unrelated subsystem | Require a checkpoint and subsystem activation brief |
+| New repository, unrelated subsystem | Avoid resetting both architecture and failure model together |
 
 Switch when all are true, or an explicit escape hatch applies:
 
@@ -412,6 +446,26 @@ and implementation scaffolding.
 Do not make the human manually repeat work that teaches nothing new merely to
 prove independence. Independence means owning the engineering judgment, not
 refusing leverage.
+
+### Human-first and retention gates
+
+Use these only at the assistance level that makes them productive:
+
+- blank-page recall: reconstruct the familiar 3–7 component HLD and one path
+  before reopening notes;
+- prediction-first: state the likely boundary and observation before source or
+  runtime evidence is revealed;
+- test-intent-first: state the invariant and pre-fix failure before AI writes
+  the test;
+- design-first: at USER-LED level, name the responsible layer and one rejected
+  alternative before AI proposes options;
+- retention: repeat the model after roughly 48 hours and one week;
+- transfer: in the next repository, identify the analogous owner/state/failure
+  boundary before receiving the project-specific answer.
+
+At GUIDED level, teach vocabulary and the healthy path first. These gates
+measure transferred judgment; they must not become quizzes on concepts that
+have not yet been grounded.
 
 ### Compounding-leverage review
 

@@ -109,6 +109,87 @@ Write only after the investigation is mature enough to explain clearly.
 
 ## Earned Evidence
 
+### CUA — Chromium accessibility readiness and truthful capability reporting
+
+### Status
+
+`ISSUE / REPRODUCTION / MAINTAINER-VISIBLE SCOPE REQUEST`
+
+### Problem
+
+Cua advertised Linux screen-reader readiness before observing Chromium, yet a
+current Chromium window could return only one bare frame while Cua reported no
+degradation. The question was whether shared accessibility infrastructure was
+broken or Chromium lacked the renderer accessibility activation callers need.
+
+### HLD and relevant LLD
+
+The bounded path was Driver runtime configuration → D-Bus
+`org.a11y.Status` advertisement → Chromium/GTK publication choice → AT-SPI →
+Cua walker → `get_window_state` reporting. Source tracing distinguished the
+external session properties from Chromium's internal accessibility mode and
+placed the plausible breakpoint before renderer-tree publication.
+
+### Failure reproduction and evidence
+
+The human co-designed and approved two isolated Docker arms with identical Cua,
+Chromium, fixture, D-Bus/AT-SPI state, and healthy GTK4 controls. Only the
+flagged arm added `--force-renderer-accessibility`. Cua and a raw AT-SPI walker
+observed each arm independently.
+
+- unflagged: one Cua frame, application + frame through raw AT-SPI, no fixture
+  markers, and no degraded classification;
+- flagged: 168 Cua elements and all five markers; raw AT-SPI independently
+  observed the renderer tree;
+- a second current-Chromium A/B proved caller impact: the unflagged existing-
+  profile path failed at the exact address-bar semantic check and exposed no
+  PID-owned CDP endpoint, while the flagged arm prepared successfully and
+  exposed the endpoint immediately and after one controlled restart;
+- internal Chromium `AXMode`: `UNKNOWN / NOT TESTED`.
+
+### Violated invariant
+
+An advertised readiness signal or live shell must not be presented as proof of
+the downstream semantic capability a caller requires.
+
+### What I personally did
+
+The human formed the flag-dependent prediction, explained why GTK, fresh
+profiles, raw AT-SPI, and separate containers were necessary controls, approved
+both experiment contracts, interpreted the A/B results, annotated the bounded
+source path, stated the regression intent, and posted the focused public scope
+question. Codex located source landmarks, implemented and executed the
+harnesses, compared evidence, and handled unfamiliar Docker, Python, and
+Rust-adjacent mechanics.
+
+### Maintainer feedback
+
+None yet. The human's evidence-backed diagnostic selection request is public at
+[#2915](https://github.com/trycua/cua/issues/2915#issuecomment-5756944169) and
+awaits maintainer direction.
+
+### Result
+
+Outcome: deterministic local reproductions on the recorded Cua and Chromium
+versions, a human-owned caller-visible invariant and regression intent, and a
+maintainer-visible scope-selection comment. This is External Proof Stage 4; no
+implementation ownership, review, or upstream acceptance is claimed.
+
+### Generalized lesson
+
+Readiness must be defined at the capability boundary the consumer relies on.
+External enablement, process existence, or a live top-level shell can coexist
+with a missing downstream semantic product.
+
+### Likely interviewer follow-up questions
+
+- Why was GTK a necessary control rather than another test application?
+- Why did raw AT-SPI add evidence beyond Cua's own output?
+- What did separate containers and fresh profiles isolate?
+- Why can one bare frame not prove Chromium's internal cause?
+- Where should incomplete capability be reported without overgeneralizing all
+  one-node native applications?
+
 ### CUA — Driver Runtime / Daemon lifecycle and session recovery
 
 ### Status
